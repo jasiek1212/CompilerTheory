@@ -1,0 +1,1520 @@
+Grammar:
+
+Rule 0     S' -> program
+Rule 1     program -> instructions_opt
+Rule 2     instructions_opt -> instructions
+Rule 3     instructions -> instructions instruction
+Rule 4     instructions -> instruction
+Rule 5     instruction -> block
+Rule 6     instruction -> print_stmt
+Rule 7     instruction -> return_stmt
+Rule 8     instruction -> continue_stmt
+Rule 9     instruction -> break_stmt
+Rule 10    instruction -> while_loop
+Rule 11    instruction -> for_loop
+Rule 12    instruction -> if_statement
+Rule 13    instruction -> expression SEMICOLON
+Rule 14    instruction -> assignment
+Rule 15    assignment -> ID DIVASSIGN expression SEMICOLON
+Rule 16    assignment -> ID MULASSIGN expression SEMICOLON
+Rule 17    assignment -> ID SUBASSIGN expression SEMICOLON
+Rule 18    assignment -> ID ADDASSIGN expression SEMICOLON
+Rule 19    assignment -> ID ASSIGN expression SEMICOLON
+Rule 20    expression_binop -> expression DOTDIV expression  [precedence=left, level=4]
+Rule 21    expression_binop -> expression DOTMUL expression  [precedence=left, level=4]
+Rule 22    expression_binop -> expression DOTSUB expression  [precedence=left, level=3]
+Rule 23    expression_binop -> expression DOTADD expression  [precedence=left, level=3]
+Rule 24    expression_binop -> expression DIVIDE expression  [precedence=left, level=2]
+Rule 25    expression_binop -> expression TIMES expression  [precedence=left, level=2]
+Rule 26    expression_binop -> expression MINUS expression  [precedence=left, level=1]
+Rule 27    expression_binop -> expression PLUS expression  [precedence=left, level=1]
+Rule 28    expression_relational -> expression NEQ expression
+Rule 29    expression_relational -> expression EQ expression
+Rule 30    expression_relational -> expression LE expression
+Rule 31    expression_relational -> expression GE expression
+Rule 32    expression_relational -> expression LT expression
+Rule 33    expression_relational -> expression GT expression
+Rule 34    expression_negate -> MINUS expression  [precedence=right, level=5]
+Rule 35    expression_transpose -> expression TRANSPOSE  [precedence=right, level=6]
+Rule 36    matrix_function -> EYE LPAREN expression RPAREN
+Rule 37    matrix_function -> ONES LPAREN expression RPAREN
+Rule 38    matrix_function -> ZEROS LPAREN expression RPAREN
+Rule 39    if_statement -> IF LPAREN expression RPAREN instruction
+Rule 40    if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction
+Rule 41    for_loop -> FOR ID EQ expression RANGE expression instruction
+Rule 42    while_loop -> WHILE LPAREN expression RPAREN instruction
+Rule 43    break_stmt -> BREAK SEMICOLON
+Rule 44    continue_stmt -> CONTINUE SEMICOLON
+Rule 45    return_stmt -> RETURN expression SEMICOLON
+Rule 46    print_stmt -> PRINT expression SEMICOLON
+Rule 47    block -> { instructions_opt }
+Rule 48    expression -> LPAREN expression RPAREN
+Rule 49    expression -> ID
+Rule 50    expression -> NUMBER
+Rule 51    NUMBER -> FLOATNUM
+Rule 52    NUMBER -> INTNUM
+
+Unused terminals:
+
+    LBRACKET
+    RBRACKET
+    LBRACE
+    RBRACE
+    COMMA
+    STRING
+
+Terminals, with rules where they appear:
+
+ADDASSIGN            : 18
+ASSIGN               : 19
+BREAK                : 43
+COMMA                : 
+CONTINUE             : 44
+DIVASSIGN            : 15
+DIVIDE               : 24
+DOTADD               : 23
+DOTDIV               : 20
+DOTMUL               : 21
+DOTSUB               : 22
+ELSE                 : 40
+EQ                   : 29 41
+EYE                  : 36
+FLOATNUM             : 51
+FOR                  : 41
+GE                   : 31
+GT                   : 33
+ID                   : 15 16 17 18 19 41 49
+IF                   : 39 40
+INTNUM               : 52
+LBRACE               : 
+LBRACKET             : 
+LE                   : 30
+LPAREN               : 36 37 38 39 40 42 48
+LT                   : 32
+MINUS                : 26 34
+MULASSIGN            : 16
+NEQ                  : 28
+ONES                 : 37
+PLUS                 : 27
+PRINT                : 46
+RANGE                : 41
+RBRACE               : 
+RBRACKET             : 
+RETURN               : 45
+RPAREN               : 36 37 38 39 40 42 48
+SEMICOLON            : 13 15 16 17 18 19 43 44 45 46
+STRING               : 
+SUBASSIGN            : 17
+TIMES                : 25
+TRANSPOSE            : 35
+WHILE                : 42
+ZEROS                : 38
+error                : 
+{                    : 47
+}                    : 47
+
+Nonterminals, with rules where they appear:
+
+NUMBER               : 50
+assignment           : 14
+block                : 5
+break_stmt           : 9
+continue_stmt        : 8
+expression           : 13 15 16 17 18 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 28 29 29 30 30 31 31 32 32 33 33 34 35 36 37 38 39 40 41 41 42 45 46 48
+expression_binop     : 
+expression_negate    : 
+expression_relational : 
+expression_transpose : 
+for_loop             : 11
+if_statement         : 12
+instruction          : 3 4 39 40 40 41 42
+instructions         : 2 3
+instructions_opt     : 1 47
+matrix_function      : 
+print_stmt           : 6
+program              : 0
+return_stmt          : 7
+while_loop           : 10
+
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . instructions_opt
+    (2) instructions_opt -> . instructions
+    (3) instructions -> . instructions instruction
+    (4) instructions -> . instruction
+    (5) instruction -> . block
+    (6) instruction -> . print_stmt
+    (7) instruction -> . return_stmt
+    (8) instruction -> . continue_stmt
+    (9) instruction -> . break_stmt
+    (10) instruction -> . while_loop
+    (11) instruction -> . for_loop
+    (12) instruction -> . if_statement
+    (13) instruction -> . expression SEMICOLON
+    (14) instruction -> . assignment
+    (47) block -> . { instructions_opt }
+    (46) print_stmt -> . PRINT expression SEMICOLON
+    (45) return_stmt -> . RETURN expression SEMICOLON
+    (44) continue_stmt -> . CONTINUE SEMICOLON
+    (43) break_stmt -> . BREAK SEMICOLON
+    (42) while_loop -> . WHILE LPAREN expression RPAREN instruction
+    (41) for_loop -> . FOR ID EQ expression RANGE expression instruction
+    (39) if_statement -> . IF LPAREN expression RPAREN instruction
+    (40) if_statement -> . IF LPAREN expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (15) assignment -> . ID DIVASSIGN expression SEMICOLON
+    (16) assignment -> . ID MULASSIGN expression SEMICOLON
+    (17) assignment -> . ID SUBASSIGN expression SEMICOLON
+    (18) assignment -> . ID ADDASSIGN expression SEMICOLON
+    (19) assignment -> . ID ASSIGN expression SEMICOLON
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    {               shift and go to state 15
+    PRINT           shift and go to state 16
+    RETURN          shift and go to state 17
+    CONTINUE        shift and go to state 18
+    BREAK           shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 22
+    IF              shift and go to state 24
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 23
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    program                        shift and go to state 1
+    instructions_opt               shift and go to state 2
+    instructions                   shift and go to state 3
+    instruction                    shift and go to state 4
+    block                          shift and go to state 5
+    print_stmt                     shift and go to state 6
+    return_stmt                    shift and go to state 7
+    continue_stmt                  shift and go to state 8
+    break_stmt                     shift and go to state 9
+    while_loop                     shift and go to state 10
+    for_loop                       shift and go to state 11
+    if_statement                   shift and go to state 12
+    expression                     shift and go to state 13
+    assignment                     shift and go to state 14
+    NUMBER                         shift and go to state 25
+
+state 1
+
+    (0) S' -> program .
+
+
+state 2
+
+    (1) program -> instructions_opt .
+    $end            reduce using rule 1 (program -> instructions_opt .)
+
+
+state 3
+
+    (2) instructions_opt -> instructions .
+    (3) instructions -> instructions . instruction
+    (5) instruction -> . block
+    (6) instruction -> . print_stmt
+    (7) instruction -> . return_stmt
+    (8) instruction -> . continue_stmt
+    (9) instruction -> . break_stmt
+    (10) instruction -> . while_loop
+    (11) instruction -> . for_loop
+    (12) instruction -> . if_statement
+    (13) instruction -> . expression SEMICOLON
+    (14) instruction -> . assignment
+    (47) block -> . { instructions_opt }
+    (46) print_stmt -> . PRINT expression SEMICOLON
+    (45) return_stmt -> . RETURN expression SEMICOLON
+    (44) continue_stmt -> . CONTINUE SEMICOLON
+    (43) break_stmt -> . BREAK SEMICOLON
+    (42) while_loop -> . WHILE LPAREN expression RPAREN instruction
+    (41) for_loop -> . FOR ID EQ expression RANGE expression instruction
+    (39) if_statement -> . IF LPAREN expression RPAREN instruction
+    (40) if_statement -> . IF LPAREN expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (15) assignment -> . ID DIVASSIGN expression SEMICOLON
+    (16) assignment -> . ID MULASSIGN expression SEMICOLON
+    (17) assignment -> . ID SUBASSIGN expression SEMICOLON
+    (18) assignment -> . ID ADDASSIGN expression SEMICOLON
+    (19) assignment -> . ID ASSIGN expression SEMICOLON
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    $end            reduce using rule 2 (instructions_opt -> instructions .)
+    }               reduce using rule 2 (instructions_opt -> instructions .)
+    {               shift and go to state 15
+    PRINT           shift and go to state 16
+    RETURN          shift and go to state 17
+    CONTINUE        shift and go to state 18
+    BREAK           shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 22
+    IF              shift and go to state 24
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 23
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    instruction                    shift and go to state 28
+    block                          shift and go to state 5
+    print_stmt                     shift and go to state 6
+    return_stmt                    shift and go to state 7
+    continue_stmt                  shift and go to state 8
+    break_stmt                     shift and go to state 9
+    while_loop                     shift and go to state 10
+    for_loop                       shift and go to state 11
+    if_statement                   shift and go to state 12
+    expression                     shift and go to state 13
+    assignment                     shift and go to state 14
+    NUMBER                         shift and go to state 25
+
+state 4
+
+    (4) instructions -> instruction .
+    {               reduce using rule 4 (instructions -> instruction .)
+    PRINT           reduce using rule 4 (instructions -> instruction .)
+    RETURN          reduce using rule 4 (instructions -> instruction .)
+    CONTINUE        reduce using rule 4 (instructions -> instruction .)
+    BREAK           reduce using rule 4 (instructions -> instruction .)
+    WHILE           reduce using rule 4 (instructions -> instruction .)
+    FOR             reduce using rule 4 (instructions -> instruction .)
+    IF              reduce using rule 4 (instructions -> instruction .)
+    LPAREN          reduce using rule 4 (instructions -> instruction .)
+    ID              reduce using rule 4 (instructions -> instruction .)
+    FLOATNUM        reduce using rule 4 (instructions -> instruction .)
+    INTNUM          reduce using rule 4 (instructions -> instruction .)
+    $end            reduce using rule 4 (instructions -> instruction .)
+    }               reduce using rule 4 (instructions -> instruction .)
+
+
+state 5
+
+    (5) instruction -> block .
+    {               reduce using rule 5 (instruction -> block .)
+    PRINT           reduce using rule 5 (instruction -> block .)
+    RETURN          reduce using rule 5 (instruction -> block .)
+    CONTINUE        reduce using rule 5 (instruction -> block .)
+    BREAK           reduce using rule 5 (instruction -> block .)
+    WHILE           reduce using rule 5 (instruction -> block .)
+    FOR             reduce using rule 5 (instruction -> block .)
+    IF              reduce using rule 5 (instruction -> block .)
+    LPAREN          reduce using rule 5 (instruction -> block .)
+    ID              reduce using rule 5 (instruction -> block .)
+    FLOATNUM        reduce using rule 5 (instruction -> block .)
+    INTNUM          reduce using rule 5 (instruction -> block .)
+    $end            reduce using rule 5 (instruction -> block .)
+    }               reduce using rule 5 (instruction -> block .)
+    ELSE            reduce using rule 5 (instruction -> block .)
+
+
+state 6
+
+    (6) instruction -> print_stmt .
+    {               reduce using rule 6 (instruction -> print_stmt .)
+    PRINT           reduce using rule 6 (instruction -> print_stmt .)
+    RETURN          reduce using rule 6 (instruction -> print_stmt .)
+    CONTINUE        reduce using rule 6 (instruction -> print_stmt .)
+    BREAK           reduce using rule 6 (instruction -> print_stmt .)
+    WHILE           reduce using rule 6 (instruction -> print_stmt .)
+    FOR             reduce using rule 6 (instruction -> print_stmt .)
+    IF              reduce using rule 6 (instruction -> print_stmt .)
+    LPAREN          reduce using rule 6 (instruction -> print_stmt .)
+    ID              reduce using rule 6 (instruction -> print_stmt .)
+    FLOATNUM        reduce using rule 6 (instruction -> print_stmt .)
+    INTNUM          reduce using rule 6 (instruction -> print_stmt .)
+    $end            reduce using rule 6 (instruction -> print_stmt .)
+    }               reduce using rule 6 (instruction -> print_stmt .)
+    ELSE            reduce using rule 6 (instruction -> print_stmt .)
+
+
+state 7
+
+    (7) instruction -> return_stmt .
+    {               reduce using rule 7 (instruction -> return_stmt .)
+    PRINT           reduce using rule 7 (instruction -> return_stmt .)
+    RETURN          reduce using rule 7 (instruction -> return_stmt .)
+    CONTINUE        reduce using rule 7 (instruction -> return_stmt .)
+    BREAK           reduce using rule 7 (instruction -> return_stmt .)
+    WHILE           reduce using rule 7 (instruction -> return_stmt .)
+    FOR             reduce using rule 7 (instruction -> return_stmt .)
+    IF              reduce using rule 7 (instruction -> return_stmt .)
+    LPAREN          reduce using rule 7 (instruction -> return_stmt .)
+    ID              reduce using rule 7 (instruction -> return_stmt .)
+    FLOATNUM        reduce using rule 7 (instruction -> return_stmt .)
+    INTNUM          reduce using rule 7 (instruction -> return_stmt .)
+    $end            reduce using rule 7 (instruction -> return_stmt .)
+    }               reduce using rule 7 (instruction -> return_stmt .)
+    ELSE            reduce using rule 7 (instruction -> return_stmt .)
+
+
+state 8
+
+    (8) instruction -> continue_stmt .
+    {               reduce using rule 8 (instruction -> continue_stmt .)
+    PRINT           reduce using rule 8 (instruction -> continue_stmt .)
+    RETURN          reduce using rule 8 (instruction -> continue_stmt .)
+    CONTINUE        reduce using rule 8 (instruction -> continue_stmt .)
+    BREAK           reduce using rule 8 (instruction -> continue_stmt .)
+    WHILE           reduce using rule 8 (instruction -> continue_stmt .)
+    FOR             reduce using rule 8 (instruction -> continue_stmt .)
+    IF              reduce using rule 8 (instruction -> continue_stmt .)
+    LPAREN          reduce using rule 8 (instruction -> continue_stmt .)
+    ID              reduce using rule 8 (instruction -> continue_stmt .)
+    FLOATNUM        reduce using rule 8 (instruction -> continue_stmt .)
+    INTNUM          reduce using rule 8 (instruction -> continue_stmt .)
+    $end            reduce using rule 8 (instruction -> continue_stmt .)
+    }               reduce using rule 8 (instruction -> continue_stmt .)
+    ELSE            reduce using rule 8 (instruction -> continue_stmt .)
+
+
+state 9
+
+    (9) instruction -> break_stmt .
+    {               reduce using rule 9 (instruction -> break_stmt .)
+    PRINT           reduce using rule 9 (instruction -> break_stmt .)
+    RETURN          reduce using rule 9 (instruction -> break_stmt .)
+    CONTINUE        reduce using rule 9 (instruction -> break_stmt .)
+    BREAK           reduce using rule 9 (instruction -> break_stmt .)
+    WHILE           reduce using rule 9 (instruction -> break_stmt .)
+    FOR             reduce using rule 9 (instruction -> break_stmt .)
+    IF              reduce using rule 9 (instruction -> break_stmt .)
+    LPAREN          reduce using rule 9 (instruction -> break_stmt .)
+    ID              reduce using rule 9 (instruction -> break_stmt .)
+    FLOATNUM        reduce using rule 9 (instruction -> break_stmt .)
+    INTNUM          reduce using rule 9 (instruction -> break_stmt .)
+    $end            reduce using rule 9 (instruction -> break_stmt .)
+    }               reduce using rule 9 (instruction -> break_stmt .)
+    ELSE            reduce using rule 9 (instruction -> break_stmt .)
+
+
+state 10
+
+    (10) instruction -> while_loop .
+    {               reduce using rule 10 (instruction -> while_loop .)
+    PRINT           reduce using rule 10 (instruction -> while_loop .)
+    RETURN          reduce using rule 10 (instruction -> while_loop .)
+    CONTINUE        reduce using rule 10 (instruction -> while_loop .)
+    BREAK           reduce using rule 10 (instruction -> while_loop .)
+    WHILE           reduce using rule 10 (instruction -> while_loop .)
+    FOR             reduce using rule 10 (instruction -> while_loop .)
+    IF              reduce using rule 10 (instruction -> while_loop .)
+    LPAREN          reduce using rule 10 (instruction -> while_loop .)
+    ID              reduce using rule 10 (instruction -> while_loop .)
+    FLOATNUM        reduce using rule 10 (instruction -> while_loop .)
+    INTNUM          reduce using rule 10 (instruction -> while_loop .)
+    $end            reduce using rule 10 (instruction -> while_loop .)
+    }               reduce using rule 10 (instruction -> while_loop .)
+    ELSE            reduce using rule 10 (instruction -> while_loop .)
+
+
+state 11
+
+    (11) instruction -> for_loop .
+    {               reduce using rule 11 (instruction -> for_loop .)
+    PRINT           reduce using rule 11 (instruction -> for_loop .)
+    RETURN          reduce using rule 11 (instruction -> for_loop .)
+    CONTINUE        reduce using rule 11 (instruction -> for_loop .)
+    BREAK           reduce using rule 11 (instruction -> for_loop .)
+    WHILE           reduce using rule 11 (instruction -> for_loop .)
+    FOR             reduce using rule 11 (instruction -> for_loop .)
+    IF              reduce using rule 11 (instruction -> for_loop .)
+    LPAREN          reduce using rule 11 (instruction -> for_loop .)
+    ID              reduce using rule 11 (instruction -> for_loop .)
+    FLOATNUM        reduce using rule 11 (instruction -> for_loop .)
+    INTNUM          reduce using rule 11 (instruction -> for_loop .)
+    $end            reduce using rule 11 (instruction -> for_loop .)
+    }               reduce using rule 11 (instruction -> for_loop .)
+    ELSE            reduce using rule 11 (instruction -> for_loop .)
+
+
+state 12
+
+    (12) instruction -> if_statement .
+    {               reduce using rule 12 (instruction -> if_statement .)
+    PRINT           reduce using rule 12 (instruction -> if_statement .)
+    RETURN          reduce using rule 12 (instruction -> if_statement .)
+    CONTINUE        reduce using rule 12 (instruction -> if_statement .)
+    BREAK           reduce using rule 12 (instruction -> if_statement .)
+    WHILE           reduce using rule 12 (instruction -> if_statement .)
+    FOR             reduce using rule 12 (instruction -> if_statement .)
+    IF              reduce using rule 12 (instruction -> if_statement .)
+    LPAREN          reduce using rule 12 (instruction -> if_statement .)
+    ID              reduce using rule 12 (instruction -> if_statement .)
+    FLOATNUM        reduce using rule 12 (instruction -> if_statement .)
+    INTNUM          reduce using rule 12 (instruction -> if_statement .)
+    $end            reduce using rule 12 (instruction -> if_statement .)
+    }               reduce using rule 12 (instruction -> if_statement .)
+    ELSE            reduce using rule 12 (instruction -> if_statement .)
+
+
+state 13
+
+    (13) instruction -> expression . SEMICOLON
+    SEMICOLON       shift and go to state 29
+
+
+state 14
+
+    (14) instruction -> assignment .
+    {               reduce using rule 14 (instruction -> assignment .)
+    PRINT           reduce using rule 14 (instruction -> assignment .)
+    RETURN          reduce using rule 14 (instruction -> assignment .)
+    CONTINUE        reduce using rule 14 (instruction -> assignment .)
+    BREAK           reduce using rule 14 (instruction -> assignment .)
+    WHILE           reduce using rule 14 (instruction -> assignment .)
+    FOR             reduce using rule 14 (instruction -> assignment .)
+    IF              reduce using rule 14 (instruction -> assignment .)
+    LPAREN          reduce using rule 14 (instruction -> assignment .)
+    ID              reduce using rule 14 (instruction -> assignment .)
+    FLOATNUM        reduce using rule 14 (instruction -> assignment .)
+    INTNUM          reduce using rule 14 (instruction -> assignment .)
+    $end            reduce using rule 14 (instruction -> assignment .)
+    }               reduce using rule 14 (instruction -> assignment .)
+    ELSE            reduce using rule 14 (instruction -> assignment .)
+
+
+state 15
+
+    (47) block -> { . instructions_opt }
+    (2) instructions_opt -> . instructions
+    (3) instructions -> . instructions instruction
+    (4) instructions -> . instruction
+    (5) instruction -> . block
+    (6) instruction -> . print_stmt
+    (7) instruction -> . return_stmt
+    (8) instruction -> . continue_stmt
+    (9) instruction -> . break_stmt
+    (10) instruction -> . while_loop
+    (11) instruction -> . for_loop
+    (12) instruction -> . if_statement
+    (13) instruction -> . expression SEMICOLON
+    (14) instruction -> . assignment
+    (47) block -> . { instructions_opt }
+    (46) print_stmt -> . PRINT expression SEMICOLON
+    (45) return_stmt -> . RETURN expression SEMICOLON
+    (44) continue_stmt -> . CONTINUE SEMICOLON
+    (43) break_stmt -> . BREAK SEMICOLON
+    (42) while_loop -> . WHILE LPAREN expression RPAREN instruction
+    (41) for_loop -> . FOR ID EQ expression RANGE expression instruction
+    (39) if_statement -> . IF LPAREN expression RPAREN instruction
+    (40) if_statement -> . IF LPAREN expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (15) assignment -> . ID DIVASSIGN expression SEMICOLON
+    (16) assignment -> . ID MULASSIGN expression SEMICOLON
+    (17) assignment -> . ID SUBASSIGN expression SEMICOLON
+    (18) assignment -> . ID ADDASSIGN expression SEMICOLON
+    (19) assignment -> . ID ASSIGN expression SEMICOLON
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    {               shift and go to state 15
+    PRINT           shift and go to state 16
+    RETURN          shift and go to state 17
+    CONTINUE        shift and go to state 18
+    BREAK           shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 22
+    IF              shift and go to state 24
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 23
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    instructions_opt               shift and go to state 30
+    instructions                   shift and go to state 3
+    instruction                    shift and go to state 4
+    block                          shift and go to state 5
+    print_stmt                     shift and go to state 6
+    return_stmt                    shift and go to state 7
+    continue_stmt                  shift and go to state 8
+    break_stmt                     shift and go to state 9
+    while_loop                     shift and go to state 10
+    for_loop                       shift and go to state 11
+    if_statement                   shift and go to state 12
+    expression                     shift and go to state 13
+    assignment                     shift and go to state 14
+    NUMBER                         shift and go to state 25
+
+state 16
+
+    (46) print_stmt -> PRINT . expression SEMICOLON
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 31
+    NUMBER                         shift and go to state 25
+
+state 17
+
+    (45) return_stmt -> RETURN . expression SEMICOLON
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 33
+    NUMBER                         shift and go to state 25
+
+state 18
+
+    (44) continue_stmt -> CONTINUE . SEMICOLON
+    SEMICOLON       shift and go to state 34
+
+
+state 19
+
+    (43) break_stmt -> BREAK . SEMICOLON
+    SEMICOLON       shift and go to state 35
+
+
+state 20
+
+    (42) while_loop -> WHILE . LPAREN expression RPAREN instruction
+    LPAREN          shift and go to state 36
+
+
+state 21
+
+    (48) expression -> LPAREN . expression RPAREN
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 37
+    NUMBER                         shift and go to state 25
+
+state 22
+
+    (41) for_loop -> FOR . ID EQ expression RANGE expression instruction
+    ID              shift and go to state 38
+
+
+state 23
+
+    (49) expression -> ID .
+    (15) assignment -> ID . DIVASSIGN expression SEMICOLON
+    (16) assignment -> ID . MULASSIGN expression SEMICOLON
+    (17) assignment -> ID . SUBASSIGN expression SEMICOLON
+    (18) assignment -> ID . ADDASSIGN expression SEMICOLON
+    (19) assignment -> ID . ASSIGN expression SEMICOLON
+    SEMICOLON       reduce using rule 49 (expression -> ID .)
+    DIVASSIGN       shift and go to state 39
+    MULASSIGN       shift and go to state 40
+    SUBASSIGN       shift and go to state 41
+    ADDASSIGN       shift and go to state 42
+    ASSIGN          shift and go to state 43
+
+
+state 24
+
+    (39) if_statement -> IF . LPAREN expression RPAREN instruction
+    (40) if_statement -> IF . LPAREN expression RPAREN instruction ELSE instruction
+    LPAREN          shift and go to state 44
+
+
+state 25
+
+    (50) expression -> NUMBER .
+    SEMICOLON       reduce using rule 50 (expression -> NUMBER .)
+    RPAREN          reduce using rule 50 (expression -> NUMBER .)
+    RANGE           reduce using rule 50 (expression -> NUMBER .)
+    {               reduce using rule 50 (expression -> NUMBER .)
+    PRINT           reduce using rule 50 (expression -> NUMBER .)
+    RETURN          reduce using rule 50 (expression -> NUMBER .)
+    CONTINUE        reduce using rule 50 (expression -> NUMBER .)
+    BREAK           reduce using rule 50 (expression -> NUMBER .)
+    WHILE           reduce using rule 50 (expression -> NUMBER .)
+    FOR             reduce using rule 50 (expression -> NUMBER .)
+    IF              reduce using rule 50 (expression -> NUMBER .)
+    LPAREN          reduce using rule 50 (expression -> NUMBER .)
+    ID              reduce using rule 50 (expression -> NUMBER .)
+    FLOATNUM        reduce using rule 50 (expression -> NUMBER .)
+    INTNUM          reduce using rule 50 (expression -> NUMBER .)
+
+
+state 26
+
+    (51) NUMBER -> FLOATNUM .
+    SEMICOLON       reduce using rule 51 (NUMBER -> FLOATNUM .)
+    RPAREN          reduce using rule 51 (NUMBER -> FLOATNUM .)
+    RANGE           reduce using rule 51 (NUMBER -> FLOATNUM .)
+    {               reduce using rule 51 (NUMBER -> FLOATNUM .)
+    PRINT           reduce using rule 51 (NUMBER -> FLOATNUM .)
+    RETURN          reduce using rule 51 (NUMBER -> FLOATNUM .)
+    CONTINUE        reduce using rule 51 (NUMBER -> FLOATNUM .)
+    BREAK           reduce using rule 51 (NUMBER -> FLOATNUM .)
+    WHILE           reduce using rule 51 (NUMBER -> FLOATNUM .)
+    FOR             reduce using rule 51 (NUMBER -> FLOATNUM .)
+    IF              reduce using rule 51 (NUMBER -> FLOATNUM .)
+    LPAREN          reduce using rule 51 (NUMBER -> FLOATNUM .)
+    ID              reduce using rule 51 (NUMBER -> FLOATNUM .)
+    FLOATNUM        reduce using rule 51 (NUMBER -> FLOATNUM .)
+    INTNUM          reduce using rule 51 (NUMBER -> FLOATNUM .)
+
+
+state 27
+
+    (52) NUMBER -> INTNUM .
+    SEMICOLON       reduce using rule 52 (NUMBER -> INTNUM .)
+    RPAREN          reduce using rule 52 (NUMBER -> INTNUM .)
+    RANGE           reduce using rule 52 (NUMBER -> INTNUM .)
+    {               reduce using rule 52 (NUMBER -> INTNUM .)
+    PRINT           reduce using rule 52 (NUMBER -> INTNUM .)
+    RETURN          reduce using rule 52 (NUMBER -> INTNUM .)
+    CONTINUE        reduce using rule 52 (NUMBER -> INTNUM .)
+    BREAK           reduce using rule 52 (NUMBER -> INTNUM .)
+    WHILE           reduce using rule 52 (NUMBER -> INTNUM .)
+    FOR             reduce using rule 52 (NUMBER -> INTNUM .)
+    IF              reduce using rule 52 (NUMBER -> INTNUM .)
+    LPAREN          reduce using rule 52 (NUMBER -> INTNUM .)
+    ID              reduce using rule 52 (NUMBER -> INTNUM .)
+    FLOATNUM        reduce using rule 52 (NUMBER -> INTNUM .)
+    INTNUM          reduce using rule 52 (NUMBER -> INTNUM .)
+
+
+state 28
+
+    (3) instructions -> instructions instruction .
+    {               reduce using rule 3 (instructions -> instructions instruction .)
+    PRINT           reduce using rule 3 (instructions -> instructions instruction .)
+    RETURN          reduce using rule 3 (instructions -> instructions instruction .)
+    CONTINUE        reduce using rule 3 (instructions -> instructions instruction .)
+    BREAK           reduce using rule 3 (instructions -> instructions instruction .)
+    WHILE           reduce using rule 3 (instructions -> instructions instruction .)
+    FOR             reduce using rule 3 (instructions -> instructions instruction .)
+    IF              reduce using rule 3 (instructions -> instructions instruction .)
+    LPAREN          reduce using rule 3 (instructions -> instructions instruction .)
+    ID              reduce using rule 3 (instructions -> instructions instruction .)
+    FLOATNUM        reduce using rule 3 (instructions -> instructions instruction .)
+    INTNUM          reduce using rule 3 (instructions -> instructions instruction .)
+    $end            reduce using rule 3 (instructions -> instructions instruction .)
+    }               reduce using rule 3 (instructions -> instructions instruction .)
+
+
+state 29
+
+    (13) instruction -> expression SEMICOLON .
+    {               reduce using rule 13 (instruction -> expression SEMICOLON .)
+    PRINT           reduce using rule 13 (instruction -> expression SEMICOLON .)
+    RETURN          reduce using rule 13 (instruction -> expression SEMICOLON .)
+    CONTINUE        reduce using rule 13 (instruction -> expression SEMICOLON .)
+    BREAK           reduce using rule 13 (instruction -> expression SEMICOLON .)
+    WHILE           reduce using rule 13 (instruction -> expression SEMICOLON .)
+    FOR             reduce using rule 13 (instruction -> expression SEMICOLON .)
+    IF              reduce using rule 13 (instruction -> expression SEMICOLON .)
+    LPAREN          reduce using rule 13 (instruction -> expression SEMICOLON .)
+    ID              reduce using rule 13 (instruction -> expression SEMICOLON .)
+    FLOATNUM        reduce using rule 13 (instruction -> expression SEMICOLON .)
+    INTNUM          reduce using rule 13 (instruction -> expression SEMICOLON .)
+    $end            reduce using rule 13 (instruction -> expression SEMICOLON .)
+    }               reduce using rule 13 (instruction -> expression SEMICOLON .)
+    ELSE            reduce using rule 13 (instruction -> expression SEMICOLON .)
+
+
+state 30
+
+    (47) block -> { instructions_opt . }
+    }               shift and go to state 45
+
+
+state 31
+
+    (46) print_stmt -> PRINT expression . SEMICOLON
+    SEMICOLON       shift and go to state 46
+
+
+state 32
+
+    (49) expression -> ID .
+    SEMICOLON       reduce using rule 49 (expression -> ID .)
+    RPAREN          reduce using rule 49 (expression -> ID .)
+    RANGE           reduce using rule 49 (expression -> ID .)
+    {               reduce using rule 49 (expression -> ID .)
+    PRINT           reduce using rule 49 (expression -> ID .)
+    RETURN          reduce using rule 49 (expression -> ID .)
+    CONTINUE        reduce using rule 49 (expression -> ID .)
+    BREAK           reduce using rule 49 (expression -> ID .)
+    WHILE           reduce using rule 49 (expression -> ID .)
+    FOR             reduce using rule 49 (expression -> ID .)
+    IF              reduce using rule 49 (expression -> ID .)
+    LPAREN          reduce using rule 49 (expression -> ID .)
+    ID              reduce using rule 49 (expression -> ID .)
+    FLOATNUM        reduce using rule 49 (expression -> ID .)
+    INTNUM          reduce using rule 49 (expression -> ID .)
+
+
+state 33
+
+    (45) return_stmt -> RETURN expression . SEMICOLON
+    SEMICOLON       shift and go to state 47
+
+
+state 34
+
+    (44) continue_stmt -> CONTINUE SEMICOLON .
+    {               reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    PRINT           reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    RETURN          reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    CONTINUE        reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    BREAK           reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    WHILE           reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    FOR             reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    IF              reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    LPAREN          reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    ID              reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    FLOATNUM        reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    INTNUM          reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    $end            reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    }               reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+    ELSE            reduce using rule 44 (continue_stmt -> CONTINUE SEMICOLON .)
+
+
+state 35
+
+    (43) break_stmt -> BREAK SEMICOLON .
+    {               reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    PRINT           reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    RETURN          reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    CONTINUE        reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    BREAK           reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    WHILE           reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    FOR             reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    IF              reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    LPAREN          reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    ID              reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    FLOATNUM        reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    INTNUM          reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    $end            reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    }               reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+    ELSE            reduce using rule 43 (break_stmt -> BREAK SEMICOLON .)
+
+
+state 36
+
+    (42) while_loop -> WHILE LPAREN . expression RPAREN instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 48
+    NUMBER                         shift and go to state 25
+
+state 37
+
+    (48) expression -> LPAREN expression . RPAREN
+    RPAREN          shift and go to state 49
+
+
+state 38
+
+    (41) for_loop -> FOR ID . EQ expression RANGE expression instruction
+    EQ              shift and go to state 50
+
+
+state 39
+
+    (15) assignment -> ID DIVASSIGN . expression SEMICOLON
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 51
+    NUMBER                         shift and go to state 25
+
+state 40
+
+    (16) assignment -> ID MULASSIGN . expression SEMICOLON
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 52
+    NUMBER                         shift and go to state 25
+
+state 41
+
+    (17) assignment -> ID SUBASSIGN . expression SEMICOLON
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 53
+    NUMBER                         shift and go to state 25
+
+state 42
+
+    (18) assignment -> ID ADDASSIGN . expression SEMICOLON
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 54
+    NUMBER                         shift and go to state 25
+
+state 43
+
+    (19) assignment -> ID ASSIGN . expression SEMICOLON
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 55
+    NUMBER                         shift and go to state 25
+
+state 44
+
+    (39) if_statement -> IF LPAREN . expression RPAREN instruction
+    (40) if_statement -> IF LPAREN . expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 56
+    NUMBER                         shift and go to state 25
+
+state 45
+
+    (47) block -> { instructions_opt } .
+    {               reduce using rule 47 (block -> { instructions_opt } .)
+    PRINT           reduce using rule 47 (block -> { instructions_opt } .)
+    RETURN          reduce using rule 47 (block -> { instructions_opt } .)
+    CONTINUE        reduce using rule 47 (block -> { instructions_opt } .)
+    BREAK           reduce using rule 47 (block -> { instructions_opt } .)
+    WHILE           reduce using rule 47 (block -> { instructions_opt } .)
+    FOR             reduce using rule 47 (block -> { instructions_opt } .)
+    IF              reduce using rule 47 (block -> { instructions_opt } .)
+    LPAREN          reduce using rule 47 (block -> { instructions_opt } .)
+    ID              reduce using rule 47 (block -> { instructions_opt } .)
+    FLOATNUM        reduce using rule 47 (block -> { instructions_opt } .)
+    INTNUM          reduce using rule 47 (block -> { instructions_opt } .)
+    $end            reduce using rule 47 (block -> { instructions_opt } .)
+    }               reduce using rule 47 (block -> { instructions_opt } .)
+    ELSE            reduce using rule 47 (block -> { instructions_opt } .)
+
+
+state 46
+
+    (46) print_stmt -> PRINT expression SEMICOLON .
+    {               reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    PRINT           reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    RETURN          reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    CONTINUE        reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    BREAK           reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    WHILE           reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    FOR             reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    IF              reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    LPAREN          reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    ID              reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    FLOATNUM        reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    INTNUM          reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    $end            reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    }               reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+    ELSE            reduce using rule 46 (print_stmt -> PRINT expression SEMICOLON .)
+
+
+state 47
+
+    (45) return_stmt -> RETURN expression SEMICOLON .
+    {               reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    PRINT           reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    RETURN          reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    CONTINUE        reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    BREAK           reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    WHILE           reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    FOR             reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    IF              reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    LPAREN          reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    ID              reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    FLOATNUM        reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    INTNUM          reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    $end            reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    }               reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+    ELSE            reduce using rule 45 (return_stmt -> RETURN expression SEMICOLON .)
+
+
+state 48
+
+    (42) while_loop -> WHILE LPAREN expression . RPAREN instruction
+    RPAREN          shift and go to state 57
+
+
+state 49
+
+    (48) expression -> LPAREN expression RPAREN .
+    SEMICOLON       reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    RANGE           reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    {               reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    PRINT           reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    RETURN          reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    CONTINUE        reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    BREAK           reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    WHILE           reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    FOR             reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    IF              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    LPAREN          reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    ID              reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    FLOATNUM        reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+    INTNUM          reduce using rule 48 (expression -> LPAREN expression RPAREN .)
+
+
+state 50
+
+    (41) for_loop -> FOR ID EQ . expression RANGE expression instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 58
+    NUMBER                         shift and go to state 25
+
+state 51
+
+    (15) assignment -> ID DIVASSIGN expression . SEMICOLON
+    SEMICOLON       shift and go to state 59
+
+
+state 52
+
+    (16) assignment -> ID MULASSIGN expression . SEMICOLON
+    SEMICOLON       shift and go to state 60
+
+
+state 53
+
+    (17) assignment -> ID SUBASSIGN expression . SEMICOLON
+    SEMICOLON       shift and go to state 61
+
+
+state 54
+
+    (18) assignment -> ID ADDASSIGN expression . SEMICOLON
+    SEMICOLON       shift and go to state 62
+
+
+state 55
+
+    (19) assignment -> ID ASSIGN expression . SEMICOLON
+    SEMICOLON       shift and go to state 63
+
+
+state 56
+
+    (39) if_statement -> IF LPAREN expression . RPAREN instruction
+    (40) if_statement -> IF LPAREN expression . RPAREN instruction ELSE instruction
+    RPAREN          shift and go to state 64
+
+
+state 57
+
+    (42) while_loop -> WHILE LPAREN expression RPAREN . instruction
+    (5) instruction -> . block
+    (6) instruction -> . print_stmt
+    (7) instruction -> . return_stmt
+    (8) instruction -> . continue_stmt
+    (9) instruction -> . break_stmt
+    (10) instruction -> . while_loop
+    (11) instruction -> . for_loop
+    (12) instruction -> . if_statement
+    (13) instruction -> . expression SEMICOLON
+    (14) instruction -> . assignment
+    (47) block -> . { instructions_opt }
+    (46) print_stmt -> . PRINT expression SEMICOLON
+    (45) return_stmt -> . RETURN expression SEMICOLON
+    (44) continue_stmt -> . CONTINUE SEMICOLON
+    (43) break_stmt -> . BREAK SEMICOLON
+    (42) while_loop -> . WHILE LPAREN expression RPAREN instruction
+    (41) for_loop -> . FOR ID EQ expression RANGE expression instruction
+    (39) if_statement -> . IF LPAREN expression RPAREN instruction
+    (40) if_statement -> . IF LPAREN expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (15) assignment -> . ID DIVASSIGN expression SEMICOLON
+    (16) assignment -> . ID MULASSIGN expression SEMICOLON
+    (17) assignment -> . ID SUBASSIGN expression SEMICOLON
+    (18) assignment -> . ID ADDASSIGN expression SEMICOLON
+    (19) assignment -> . ID ASSIGN expression SEMICOLON
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    {               shift and go to state 15
+    PRINT           shift and go to state 16
+    RETURN          shift and go to state 17
+    CONTINUE        shift and go to state 18
+    BREAK           shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 22
+    IF              shift and go to state 24
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 23
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 13
+    instruction                    shift and go to state 65
+    block                          shift and go to state 5
+    print_stmt                     shift and go to state 6
+    return_stmt                    shift and go to state 7
+    continue_stmt                  shift and go to state 8
+    break_stmt                     shift and go to state 9
+    while_loop                     shift and go to state 10
+    for_loop                       shift and go to state 11
+    if_statement                   shift and go to state 12
+    assignment                     shift and go to state 14
+    NUMBER                         shift and go to state 25
+
+state 58
+
+    (41) for_loop -> FOR ID EQ expression . RANGE expression instruction
+    RANGE           shift and go to state 66
+
+
+state 59
+
+    (15) assignment -> ID DIVASSIGN expression SEMICOLON .
+    {               reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    PRINT           reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    RETURN          reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    CONTINUE        reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    BREAK           reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    WHILE           reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    FOR             reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    IF              reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    LPAREN          reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    ID              reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    FLOATNUM        reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    INTNUM          reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    $end            reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    }               reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+    ELSE            reduce using rule 15 (assignment -> ID DIVASSIGN expression SEMICOLON .)
+
+
+state 60
+
+    (16) assignment -> ID MULASSIGN expression SEMICOLON .
+    {               reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    PRINT           reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    RETURN          reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    CONTINUE        reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    BREAK           reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    WHILE           reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    FOR             reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    IF              reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    LPAREN          reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    ID              reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    FLOATNUM        reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    INTNUM          reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    $end            reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    }               reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+    ELSE            reduce using rule 16 (assignment -> ID MULASSIGN expression SEMICOLON .)
+
+
+state 61
+
+    (17) assignment -> ID SUBASSIGN expression SEMICOLON .
+    {               reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    PRINT           reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    RETURN          reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    CONTINUE        reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    BREAK           reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    WHILE           reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    FOR             reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    IF              reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    LPAREN          reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    ID              reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    FLOATNUM        reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    INTNUM          reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    $end            reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    }               reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+    ELSE            reduce using rule 17 (assignment -> ID SUBASSIGN expression SEMICOLON .)
+
+
+state 62
+
+    (18) assignment -> ID ADDASSIGN expression SEMICOLON .
+    {               reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    PRINT           reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    RETURN          reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    CONTINUE        reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    BREAK           reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    WHILE           reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    FOR             reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    IF              reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    LPAREN          reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    ID              reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    FLOATNUM        reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    INTNUM          reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    $end            reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    }               reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+    ELSE            reduce using rule 18 (assignment -> ID ADDASSIGN expression SEMICOLON .)
+
+
+state 63
+
+    (19) assignment -> ID ASSIGN expression SEMICOLON .
+    {               reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    PRINT           reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    RETURN          reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    CONTINUE        reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    BREAK           reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    WHILE           reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    FOR             reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    IF              reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    LPAREN          reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    ID              reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    FLOATNUM        reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    INTNUM          reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    $end            reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    }               reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+    ELSE            reduce using rule 19 (assignment -> ID ASSIGN expression SEMICOLON .)
+
+
+state 64
+
+    (39) if_statement -> IF LPAREN expression RPAREN . instruction
+    (40) if_statement -> IF LPAREN expression RPAREN . instruction ELSE instruction
+    (5) instruction -> . block
+    (6) instruction -> . print_stmt
+    (7) instruction -> . return_stmt
+    (8) instruction -> . continue_stmt
+    (9) instruction -> . break_stmt
+    (10) instruction -> . while_loop
+    (11) instruction -> . for_loop
+    (12) instruction -> . if_statement
+    (13) instruction -> . expression SEMICOLON
+    (14) instruction -> . assignment
+    (47) block -> . { instructions_opt }
+    (46) print_stmt -> . PRINT expression SEMICOLON
+    (45) return_stmt -> . RETURN expression SEMICOLON
+    (44) continue_stmt -> . CONTINUE SEMICOLON
+    (43) break_stmt -> . BREAK SEMICOLON
+    (42) while_loop -> . WHILE LPAREN expression RPAREN instruction
+    (41) for_loop -> . FOR ID EQ expression RANGE expression instruction
+    (39) if_statement -> . IF LPAREN expression RPAREN instruction
+    (40) if_statement -> . IF LPAREN expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (15) assignment -> . ID DIVASSIGN expression SEMICOLON
+    (16) assignment -> . ID MULASSIGN expression SEMICOLON
+    (17) assignment -> . ID SUBASSIGN expression SEMICOLON
+    (18) assignment -> . ID ADDASSIGN expression SEMICOLON
+    (19) assignment -> . ID ASSIGN expression SEMICOLON
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    {               shift and go to state 15
+    PRINT           shift and go to state 16
+    RETURN          shift and go to state 17
+    CONTINUE        shift and go to state 18
+    BREAK           shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 22
+    IF              shift and go to state 24
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 23
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 13
+    instruction                    shift and go to state 67
+    block                          shift and go to state 5
+    print_stmt                     shift and go to state 6
+    return_stmt                    shift and go to state 7
+    continue_stmt                  shift and go to state 8
+    break_stmt                     shift and go to state 9
+    while_loop                     shift and go to state 10
+    for_loop                       shift and go to state 11
+    if_statement                   shift and go to state 12
+    assignment                     shift and go to state 14
+    NUMBER                         shift and go to state 25
+
+state 65
+
+    (42) while_loop -> WHILE LPAREN expression RPAREN instruction .
+    {               reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    PRINT           reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    RETURN          reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    CONTINUE        reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    BREAK           reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    WHILE           reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    FOR             reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    IF              reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    LPAREN          reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    ID              reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    FLOATNUM        reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    INTNUM          reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    $end            reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    }               reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+    ELSE            reduce using rule 42 (while_loop -> WHILE LPAREN expression RPAREN instruction .)
+
+
+state 66
+
+    (41) for_loop -> FOR ID EQ expression RANGE . expression instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 32
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 68
+    NUMBER                         shift and go to state 25
+
+state 67
+
+    (39) if_statement -> IF LPAREN expression RPAREN instruction .
+    (40) if_statement -> IF LPAREN expression RPAREN instruction . ELSE instruction
+  ! shift/reduce conflict for ELSE resolved as shift
+    {               reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    PRINT           reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    RETURN          reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    CONTINUE        reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    BREAK           reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    WHILE           reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    FOR             reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    IF              reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    LPAREN          reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    ID              reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    FLOATNUM        reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    INTNUM          reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    $end            reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    }               reduce using rule 39 (if_statement -> IF LPAREN expression RPAREN instruction .)
+    ELSE            shift and go to state 69
+
+
+state 68
+
+    (41) for_loop -> FOR ID EQ expression RANGE expression . instruction
+    (5) instruction -> . block
+    (6) instruction -> . print_stmt
+    (7) instruction -> . return_stmt
+    (8) instruction -> . continue_stmt
+    (9) instruction -> . break_stmt
+    (10) instruction -> . while_loop
+    (11) instruction -> . for_loop
+    (12) instruction -> . if_statement
+    (13) instruction -> . expression SEMICOLON
+    (14) instruction -> . assignment
+    (47) block -> . { instructions_opt }
+    (46) print_stmt -> . PRINT expression SEMICOLON
+    (45) return_stmt -> . RETURN expression SEMICOLON
+    (44) continue_stmt -> . CONTINUE SEMICOLON
+    (43) break_stmt -> . BREAK SEMICOLON
+    (42) while_loop -> . WHILE LPAREN expression RPAREN instruction
+    (41) for_loop -> . FOR ID EQ expression RANGE expression instruction
+    (39) if_statement -> . IF LPAREN expression RPAREN instruction
+    (40) if_statement -> . IF LPAREN expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (15) assignment -> . ID DIVASSIGN expression SEMICOLON
+    (16) assignment -> . ID MULASSIGN expression SEMICOLON
+    (17) assignment -> . ID SUBASSIGN expression SEMICOLON
+    (18) assignment -> . ID ADDASSIGN expression SEMICOLON
+    (19) assignment -> . ID ASSIGN expression SEMICOLON
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    {               shift and go to state 15
+    PRINT           shift and go to state 16
+    RETURN          shift and go to state 17
+    CONTINUE        shift and go to state 18
+    BREAK           shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 22
+    IF              shift and go to state 24
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 23
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 13
+    instruction                    shift and go to state 70
+    block                          shift and go to state 5
+    print_stmt                     shift and go to state 6
+    return_stmt                    shift and go to state 7
+    continue_stmt                  shift and go to state 8
+    break_stmt                     shift and go to state 9
+    while_loop                     shift and go to state 10
+    for_loop                       shift and go to state 11
+    if_statement                   shift and go to state 12
+    assignment                     shift and go to state 14
+    NUMBER                         shift and go to state 25
+
+state 69
+
+    (40) if_statement -> IF LPAREN expression RPAREN instruction ELSE . instruction
+    (5) instruction -> . block
+    (6) instruction -> . print_stmt
+    (7) instruction -> . return_stmt
+    (8) instruction -> . continue_stmt
+    (9) instruction -> . break_stmt
+    (10) instruction -> . while_loop
+    (11) instruction -> . for_loop
+    (12) instruction -> . if_statement
+    (13) instruction -> . expression SEMICOLON
+    (14) instruction -> . assignment
+    (47) block -> . { instructions_opt }
+    (46) print_stmt -> . PRINT expression SEMICOLON
+    (45) return_stmt -> . RETURN expression SEMICOLON
+    (44) continue_stmt -> . CONTINUE SEMICOLON
+    (43) break_stmt -> . BREAK SEMICOLON
+    (42) while_loop -> . WHILE LPAREN expression RPAREN instruction
+    (41) for_loop -> . FOR ID EQ expression RANGE expression instruction
+    (39) if_statement -> . IF LPAREN expression RPAREN instruction
+    (40) if_statement -> . IF LPAREN expression RPAREN instruction ELSE instruction
+    (48) expression -> . LPAREN expression RPAREN
+    (49) expression -> . ID
+    (50) expression -> . NUMBER
+    (15) assignment -> . ID DIVASSIGN expression SEMICOLON
+    (16) assignment -> . ID MULASSIGN expression SEMICOLON
+    (17) assignment -> . ID SUBASSIGN expression SEMICOLON
+    (18) assignment -> . ID ADDASSIGN expression SEMICOLON
+    (19) assignment -> . ID ASSIGN expression SEMICOLON
+    (51) NUMBER -> . FLOATNUM
+    (52) NUMBER -> . INTNUM
+    {               shift and go to state 15
+    PRINT           shift and go to state 16
+    RETURN          shift and go to state 17
+    CONTINUE        shift and go to state 18
+    BREAK           shift and go to state 19
+    WHILE           shift and go to state 20
+    FOR             shift and go to state 22
+    IF              shift and go to state 24
+    LPAREN          shift and go to state 21
+    ID              shift and go to state 23
+    FLOATNUM        shift and go to state 26
+    INTNUM          shift and go to state 27
+
+    expression                     shift and go to state 13
+    instruction                    shift and go to state 71
+    block                          shift and go to state 5
+    print_stmt                     shift and go to state 6
+    return_stmt                    shift and go to state 7
+    continue_stmt                  shift and go to state 8
+    break_stmt                     shift and go to state 9
+    while_loop                     shift and go to state 10
+    for_loop                       shift and go to state 11
+    if_statement                   shift and go to state 12
+    assignment                     shift and go to state 14
+    NUMBER                         shift and go to state 25
+
+state 70
+
+    (41) for_loop -> FOR ID EQ expression RANGE expression instruction .
+    {               reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    PRINT           reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    RETURN          reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    CONTINUE        reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    BREAK           reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    WHILE           reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    FOR             reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    IF              reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    LPAREN          reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    ID              reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    FLOATNUM        reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    INTNUM          reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    $end            reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    }               reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+    ELSE            reduce using rule 41 (for_loop -> FOR ID EQ expression RANGE expression instruction .)
+
+
+state 71
+
+    (40) if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .
+    {               reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    PRINT           reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    RETURN          reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    CONTINUE        reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    BREAK           reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    WHILE           reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    FOR             reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    IF              reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    LPAREN          reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    ID              reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    FLOATNUM        reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    INTNUM          reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    $end            reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    }               reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+    ELSE            reduce using rule 40 (if_statement -> IF LPAREN expression RPAREN instruction ELSE instruction .)
+
+
+Conflicts:
+
+shift/reduce conflict for ELSE in state 67 resolved as shift

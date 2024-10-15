@@ -3,7 +3,6 @@ from sly import Lexer
 
 class Scanner(Lexer):
     
-    # Keyword mapping
     keywords = {
         'if': 'IF',
         'else': 'ELSE',
@@ -17,17 +16,15 @@ class Scanner(Lexer):
         'ones': 'ONES',
         'print': 'PRINT'
     }
-    # Set of token names. This is always required
+    
     tokens = [ 'ID', 'EQ', 'NEQ', 'LE', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'DOTADD', 'DOTSUB', 
                'DOTMUL', 'DOTDIV', 'ASSIGN', 'ADDASSIGN', 'SUBASSIGN', 'MULASSIGN', 'DIVASSIGN', 
                'LT', 'GT', 'LPAREN', 'RPAREN', 'LBRACKET', 'RBRACKET', 'LBRACE', 'RBRACE', 'RANGE', 
                'TRANSPOSE', 'COMMA', 'SEMICOLON', 'INTNUM', 'FLOATNUM', 'STRING' ] + list(keywords.values())
 
-    # Ignored characters (whitespace and comments)
     ignore = ' \t'
     ignore_comment = r'\#.*'
     
-    # Regular expression rules for tokens
     PLUS        = r'\+'
     MINUS       = r'-'
     TIMES       = r'\*'
@@ -64,13 +61,12 @@ class Scanner(Lexer):
     SEMICOLON   = r';'
 
     
-    # Regular expression rules for complex tokens
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
     def ID(self, t):
-        t.type = self.keywords.get(t.value, 'ID')  # Check if it's a keyword
+        t.type = self.keywords.get(t.value, 'ID')
         return t
 
-    @_(r'\d+\.\d+')
+    @_(r'\d*\.\d+(E-?\d+)?')
     def FLOATNUM(self, t):
         t.value = float(t.value)
         return t
@@ -82,15 +78,13 @@ class Scanner(Lexer):
 
     @_(r'\".*?\"')
     def STRING(self, t):
-        t.value = t.value[1:-1]  # Strip quotes
+        t.value = t.value[1:-1]
         return t
 
-    # Handle new lines (track line numbers)
     @_(r'\n+')
     def newline(self, t):
         self.lineno += len(t.value)
 
-    # Error handling rule
     def error(self, t):
         print(f"Illegal character '{t.value[0]}' at line {self.lineno}")
         self.index += 1
