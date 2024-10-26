@@ -19,14 +19,13 @@ class Scanner(Lexer):
     
     tokens = [ 'ID', 'EQ', 'NEQ', 'LE', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'DOTADD', 'DOTSUB', 
                'DOTMUL', 'DOTDIV', 'ASSIGN', 'ADDASSIGN', 'SUBASSIGN', 'MULASSIGN', 'DIVASSIGN', 
-               'LT', 'GT', 'RANGE', 'TRANSPOSE', 'INTNUM', 'FLOATNUM', 'STRING' ] + list(keywords.values())
+               'LT', 'GT', 'RANGE', 'TRANSPOSE', 'INTNUM', 'FLOATNUM', 'STRING', 'ELSE_IF'] + list(keywords.values())
     
     literals = {'{', '}', '[', ']', ',', ';', '(', ')' }
 
     ignore = ' \t'
     ignore_comment = r'\#.*'
     
-
     EQ          = r'=='
     
     ADDASSIGN   = r'\+='
@@ -53,6 +52,11 @@ class Scanner(Lexer):
     
     RANGE       = r':'
     TRANSPOSE   = r"'"
+
+    @_(r'else if')
+    def ELSE_IF(self, t):
+        t.type = 'ELSE_IF'
+        return t
 
     
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
@@ -87,7 +91,7 @@ class Scanner(Lexer):
 if __name__ == '__main__':
 
     try:
-        filename = sys.argv[1] if len(sys.argv) > 1 else "example.txt"
+        filename = sys.argv[1] if len(sys.argv) > 1 else "example3.txt"
         file = open(filename, "r")
     except IOError:
         print("Cannot open {0} file".format(filename))

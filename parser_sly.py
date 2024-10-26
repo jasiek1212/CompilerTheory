@@ -11,6 +11,7 @@ class Mparser(Parser):
     precedence = (
         ('nonassoc', 'JUST_IF'),
         ('nonassoc', 'ELSE'),
+        ('nonassoc', 'ELSE_IF'),
         ('nonassoc', 'ASSIGN',  'SUBASSIGN', 'ADDASSIGN', 'MULASSIGN', 'DIVASSIGN'),
         ('left', 'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE'),
         ("left", 'PLUS', 'MINUS'),
@@ -26,15 +27,15 @@ class Mparser(Parser):
         pass
 
 
-    @_('"{" instruction "}"',
-       'instruction',
+    @_('instruction',
        'instructions instruction')
     def instructions(self, p):
         pass  
 
 
     @_('end_line_instruction ";"',
-       'non_end_instruction')
+       'non_end_instruction',
+       '"{" instructions "}"')
     def instruction(self, p):
         pass  
 
@@ -133,18 +134,23 @@ class Mparser(Parser):
     def value_list(self, p):
         pass
 
-    # Warunek if-else
-    @_('IF "(" expression ")" instructions  %prec JUST_IF',
-       'IF "(" expression ")" instructions ELSE instructions',
-       )
+    @_('IF "(" expression ")" instructions else_if_chain %prec JUST_IF')
     def if_statement(self, p):
-        pass  
+        pass
 
-    @_('FOR ID ASSIGN expression RANGE expression instruction')
+    # Handles else-if chains and else clause
+    @_('ELSE_IF "(" expression ")" instructions else_if_chain',
+    'ELSE instructions',
+    '')
+    def else_if_chain(self, p):
+        pass
+
+
+    @_('FOR ID ASSIGN expression RANGE expression instructions')
     def for_loop(self, p):
         pass  
 
-    @_('WHILE "(" expression ")" instruction')
+    @_('WHILE "(" expression ")" instructions')
     def while_loop(self, p):
         pass  
 
@@ -160,7 +166,7 @@ class Mparser(Parser):
     def return_stmt(self, p):
         pass  
 
-    @_('PRINT expression')
+    @_('PRINT value_list')
     def print_stmt(self, p):
         pass  
 
