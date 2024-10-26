@@ -19,12 +19,22 @@ class Scanner(Lexer):
     
     tokens = [ 'ID', 'EQ', 'NEQ', 'LE', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'DOTADD', 'DOTSUB', 
                'DOTMUL', 'DOTDIV', 'ASSIGN', 'ADDASSIGN', 'SUBASSIGN', 'MULASSIGN', 'DIVASSIGN', 
-               'LT', 'GT', 'LPAREN', 'RPAREN', 'LBRACKET', 'RBRACKET', 'LBRACE', 'RBRACE', 'RANGE', 
-               'TRANSPOSE', 'COMMA', 'SEMICOLON', 'INTNUM', 'FLOATNUM', 'STRING' ] + list(keywords.values())
+               'LT', 'GT', 'RANGE', 'TRANSPOSE', 'INTNUM', 'FLOATNUM', 'STRING' ] + list(keywords.values())
+    
+    literals = {'{', '}', '[', ']', ',', ';', '(', ')' }
 
     ignore = ' \t'
     ignore_comment = r'\#.*'
     
+
+    EQ          = r'=='
+    
+    ADDASSIGN   = r'\+='
+    SUBASSIGN   = r'-='
+    MULASSIGN   = r'\*='
+    DIVASSIGN   = r'/='
+    ASSIGN      = r'='
+
     PLUS        = r'\+'
     MINUS       = r'-'
     TIMES       = r'\*'
@@ -35,30 +45,14 @@ class Scanner(Lexer):
     DOTMUL      = r'\.\*'
     DOTDIV      = r'\./'
     
-    ASSIGN      = r'='
-    ADDASSIGN   = r'\+='
-    SUBASSIGN   = r'-='
-    MULASSIGN   = r'\*='
-    DIVASSIGN   = r'/='
-    
-    LT          = r'<'
-    GT          = r'>'
     LE          = r'<='
     GE          = r'>='
     NEQ         = r'!='
-    EQ          = r'=='
-
-    LPAREN      = r'\('
-    RPAREN      = r'\)'
-    LBRACKET    = r'\['
-    RBRACKET    = r'\]'
-    LBRACE      = r'\{'
-    RBRACE      = r'\}'
+    LT          = r'<'
+    GT          = r'>'
     
     RANGE       = r':'
     TRANSPOSE   = r"'"
-    COMMA       = r','
-    SEMICOLON   = r';'
 
     
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
@@ -66,7 +60,7 @@ class Scanner(Lexer):
         t.type = self.keywords.get(t.value, 'ID')
         return t
 
-    @_(r'\d*\.\d+(E-?\d+)?')
+    @_(r'\d*\.\d*(E-?\d+)?')
     def FLOATNUM(self, t):
         t.value = float(t.value)
         return t

@@ -1,14 +1,18 @@
 from sly import Parser
-from scanner_sly import Scanner  # zakładamy, że masz już gotowy skaner
+from scanner_sly import Scanner 
 
 class Mparser(Parser):
     tokens = Scanner.tokens
+    literals = Scanner.literals
+    keywords = Scanner.keywords
 
-    # Plik do zapisu wyników debugowania
     debugfile = 'parser.out'
 
-    # Precedencja operatorów (od najniższego do najwyższego priorytetu)
     precedence = (
+        ('nonassoc', 'JUST_IF'),
+        ('nonassoc', 'ELSE'),
+        ('nonassoc', 'ASSIGN',  'SUBASSIGN', 'ADDASSIGN', 'MULASSIGN', 'DIVASSIGN'),
+        ('left', 'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE'),
         ("left", 'PLUS', 'MINUS'),
         ("left", 'TIMES', 'DIVIDE'),
         ("left", 'DOTADD', 'DOTSUB'),
@@ -17,60 +21,76 @@ class Mparser(Parser):
         ("right", 'TRANSPOSE'),
     )
 
-    # Program składa się z opcjonalnej listy instrukcji
-    @_('instructions_opt')
-    def program(self, p):
-        pass  # Pusta produkcja
-
-    # Opcjonalne instrukcje (pusta lista lub lista instrukcji)
     @_('instructions')
-    def instructions_opt(self, p):
-        pass  # Pusta produkcja
+    def program(self, p):
+        pass
 
-    @_('instruction')
+
+    @_('"{" instruction "}"',
+       'instruction',
+       'instructions instruction')
     def instructions(self, p):
-        pass  # Pusta produkcja
-
-    # Lista instrukcji
-    @_('instructions instruction')
-    def instructions(self, p):
-        pass  # Pusta produkcja
+        pass  
 
 
-    # Instrukcja może być przypisaniem, wyrażeniem, pętlą, itp.
+    @_('end_line_instruction ";"',
+       'non_end_instruction')
+    def instruction(self, p):
+        pass  
+
     @_('assignment',
-       'expression SEMICOLON',
-       'if_statement',
-       'for_loop',
-       'while_loop',
        'break_stmt',
        'continue_stmt',
        'return_stmt',
        'print_stmt',
-       'block')
-    def instruction(self, p):
-        pass  # Pusta produkcja
+       )
+    def end_line_instruction(self, p):
+        pass
 
-    # Instrukcja przypisania
-    @_('ID ASSIGN expression SEMICOLON',
-       'ID ADDASSIGN expression SEMICOLON',
-       'ID SUBASSIGN expression SEMICOLON',
-       'ID MULASSIGN expression SEMICOLON',
-       'ID DIVASSIGN expression SEMICOLON')
+    @_('if_statement',
+       'for_loop',
+       'while_loop'
+       )
+    def non_end_instruction(self, p):
+        pass
+
+    @_('ID ASSIGN expression',
+       'ID ADDASSIGN expression',
+       'ID SUBASSIGN expression',
+       'ID MULASSIGN expression',
+       'ID DIVASSIGN expression')
     def assignment(self, p):
-        pass  # Pusta produkcja
+        pass  
 
     # Wyrażenie binarne
-    @_('expression PLUS expression',
-       'expression MINUS expression',
-       'expression TIMES expression',
-       'expression DIVIDE expression',
-       'expression DOTADD expression',
-       'expression DOTSUB expression',
-       'expression DOTMUL expression',
-       'expression DOTDIV expression')
-    def expression_binop(self, p):
-        pass  # Pusta produkcja
+    @_('expression PLUS term',
+       'expression MINUS term',
+       'expression DOTADD term',
+       'expression DOTSUB term',
+       'term',
+        )
+    def expression_op(self, p):
+        pass  
+
+    @_('term TIMES factor',
+       'term DIVIDE factor',
+       'term DOTMUL factor',
+       'term DOTDIV factor',
+       'factor'
+        )
+    def term(self, p):
+        pass
+
+    @_('NUMBER',
+       'ID',
+       'STRING',
+       '"(" expression ")"',
+       '"[" value_list "]"',
+       'matrix_function',
+       'expression_transpose TRANSPOSE'
+       )
+    def factor(self, p):
+        pass
 
     # Wyrażenie relacyjne
     @_('expression GT expression',
@@ -80,79 +100,75 @@ class Mparser(Parser):
        'expression EQ expression',
        'expression NEQ expression')
     def expression_relational(self, p):
-        pass  # Pusta produkcja
+        pass  
 
     # Negacja unarna
-    @_('MINUS expression %prec NEGATE')
+    @_('expression %prec NEGATE')
     def expression_negate(self, p):
-        pass  # Pusta produkcja
+        pass  
 
     # Transpozycja macierzy
-    @_('expression TRANSPOSE %prec TRANSPOSE')
+    @_('factor %prec TRANSPOSE')
     def expression_transpose(self, p):
-        pass  # Pusta produkcja
+        pass  
 
     # Specjalne funkcje macierzowe
-    @_('ZEROS LPAREN expression RPAREN',
-       'ONES LPAREN expression RPAREN',
-       'EYE LPAREN expression RPAREN')
+    @_('ZEROS "(" expression ")"',
+       'ONES "(" expression ")"',
+       'EYE "(" expression ")"')
     def matrix_function(self, p):
-        pass  # Pusta produkcja
+        pass  
+
+
+    @_('MINUS expression_negate',
+       'expression_op',
+       'expression_relational'
+    #    'expression_transpose TRANSPOSE'
+       )
+    def expression(self, p):
+        pass  
+    
+    @_('value_list "," expression',
+       'expression')
+    def value_list(self, p):
+        pass
 
     # Warunek if-else
-    @_('IF LPAREN expression RPAREN instruction ELSE instruction',
-       'IF LPAREN expression RPAREN instruction')
+    @_('IF "(" expression ")" instructions  %prec JUST_IF',
+       'IF "(" expression ")" instructions ELSE instructions',
+       )
     def if_statement(self, p):
-        pass  # Pusta produkcja
+        pass  
 
-    # Pętla for
-    @_('FOR ID EQ expression RANGE expression instruction')
+    @_('FOR ID ASSIGN expression RANGE expression instruction')
     def for_loop(self, p):
-        pass  # Pusta produkcja
+        pass  
 
-    # Pętla while
-    @_('WHILE LPAREN expression RPAREN instruction')
+    @_('WHILE "(" expression ")" instruction')
     def while_loop(self, p):
-        pass  # Pusta produkcja
+        pass  
 
-    # Instrukcja break
-    @_('BREAK SEMICOLON')
+    @_('BREAK')
     def break_stmt(self, p):
-        pass  # Pusta produkcja
+        pass  
 
-    # Instrukcja continue
-    @_('CONTINUE SEMICOLON')
+    @_('CONTINUE')
     def continue_stmt(self, p):
-        pass  # Pusta produkcja
+        pass  
 
-    # Instrukcja return
-    @_('RETURN expression SEMICOLON')
+    @_('RETURN expression')
     def return_stmt(self, p):
-        pass  # Pusta produkcja
+        pass  
 
-    # Instrukcja print
-    @_('PRINT expression SEMICOLON')
+    @_('PRINT expression')
     def print_stmt(self, p):
-        pass  # Pusta produkcja
-
-    # Blok instrukcji
-    @_('"{" instructions_opt "}"')
-    def block(self, p):
-        pass  # Pusta produkcja
-
-    # Wyrażenia – liczby, zmienne, wyrażenia w nawiasach
-    @_('NUMBER',
-       'ID',
-       'LPAREN expression RPAREN')
-    def expression(self, p):
-        pass  # Pusta produkcja
+        pass  
 
     @_('INTNUM',
        'FLOATNUM')
     def NUMBER(self, p):
         pass
 
-    # Obsługa błędów
     def error(self, p):
         if p:
             print(f"Syntax error at token {p.type}, value {p.value}")
