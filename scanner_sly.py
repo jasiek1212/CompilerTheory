@@ -64,7 +64,8 @@ class Scanner(Lexer):
         t.type = self.keywords.get(t.value, 'ID')
         return t
 
-    @_(r'\d*\.\d*(E-?\d+)?')
+    @_(r'\d*\.\d+(E-?\d+)?',
+       r'\d+\.d*(E-?\d+)?')
     def FLOATNUM(self, t):
         t.value = float(t.value)
         return t

@@ -3,8 +3,8 @@ from scanner_sly import Scanner
 
 class Mparser(Parser):
     tokens = Scanner.tokens
-    literals = Scanner.literals
-    keywords = Scanner.keywords
+    # literals = Scanner.literals
+    # keywords = Scanner.keywords
 
     debugfile = 'parser.out'
 
@@ -12,11 +12,10 @@ class Mparser(Parser):
         ('nonassoc', 'JUST_IF'),
         ('nonassoc', 'ELSE'),
         ('nonassoc', 'ELSE_IF'),
-        ('nonassoc', 'ASSIGN',  'SUBASSIGN', 'ADDASSIGN', 'MULASSIGN', 'DIVASSIGN'),
         ('left', 'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE'),
         ("left", 'PLUS', 'MINUS'),
-        ("left", 'TIMES', 'DIVIDE'),
         ("left", 'DOTADD', 'DOTSUB'),
+        ("left", 'TIMES', 'DIVIDE'),
         ("left", 'DOTMUL', 'DOTDIV'),
         ("right", 'NEGATE'),
         ("right", 'TRANSPOSE'),
@@ -61,25 +60,6 @@ class Mparser(Parser):
        'ID MULASSIGN expression',
        'ID DIVASSIGN expression')
     def assignment(self, p):
-        pass  
-
-    # Wyrażenie binarne
-    @_('expression PLUS term',
-       'expression MINUS term',
-       'expression DOTADD term',
-       'expression DOTSUB term',
-       'term',
-        )
-    def expression_op(self, p):
-        pass  
-
-    @_('term TIMES factor',
-       'term DIVIDE factor',
-       'term DOTMUL factor',
-       'term DOTDIV factor',
-       'factor'
-        )
-    def term(self, p):
         pass
 
     @_('NUMBER',
@@ -93,27 +73,32 @@ class Mparser(Parser):
     def factor(self, p):
         pass
 
-    # Wyrażenie relacyjne
-    @_('expression GT expression',
+    @_('expression PLUS expression',
+       'expression MINUS expression',
+       'expression DOTADD expression',
+       'expression DOTSUB expression',
+       'expression TIMES expression',
+       'expression DIVIDE expression',
+       'expression DOTMUL expression',
+       'expression DOTDIV expression',
+       'expression GT expression',
        'expression LT expression',
        'expression GE expression',
        'expression LE expression',
        'expression EQ expression',
-       'expression NEQ expression')
-    def expression_relational(self, p):
-        pass  
+       'expression NEQ expression'
+       )
+    def expression_bin(self, p):
+        pass
 
-    # Negacja unarna
     @_('expression %prec NEGATE')
     def expression_negate(self, p):
         pass  
 
-    # Transpozycja macierzy
     @_('factor %prec TRANSPOSE')
     def expression_transpose(self, p):
         pass  
 
-    # Specjalne funkcje macierzowe
     @_('ZEROS "(" expression ")"',
        'ONES "(" expression ")"',
        'EYE "(" expression ")"')
@@ -122,9 +107,8 @@ class Mparser(Parser):
 
 
     @_('MINUS expression_negate',
-       'expression_op',
-       'expression_relational'
-    #    'expression_transpose TRANSPOSE'
+       'expression_bin',
+       'factor'
        )
     def expression(self, p):
         pass  
@@ -134,23 +118,25 @@ class Mparser(Parser):
     def value_list(self, p):
         pass
 
-    @_('IF "(" expression ")" instructions else_if_chain %prec JUST_IF')
+    @_('IF "(" expression ")" instruction %prec JUST_IF',
+       'IF "(" expression ")" instruction else_if_chain')
     def if_statement(self, p):
         pass
 
     # Handles else-if chains and else clause
-    @_('ELSE_IF "(" expression ")" instructions else_if_chain',
-    'ELSE instructions',
-    '')
+    @_('ELSE_IF "(" expression ")" instruction',
+       'ELSE_IF "(" expression ")" instruction else_if_chain',
+       'ELSE instruction'
+    )
     def else_if_chain(self, p):
         pass
 
 
-    @_('FOR ID ASSIGN expression RANGE expression instructions')
+    @_('FOR ID ASSIGN expression RANGE expression instruction')
     def for_loop(self, p):
         pass  
 
-    @_('WHILE "(" expression ")" instructions')
+    @_('WHILE "(" expression ")" instruction')
     def while_loop(self, p):
         pass  
 
@@ -177,7 +163,8 @@ class Mparser(Parser):
 
     def error(self, p):
         if p:
-            print(f"Syntax error at token {p.type}, value {p.value}")
+            print(f"Syntax error at line {p.lineno}: Unexpected token '{p.value}' of type '{p.type}'")
         else:
-            print("Syntax error at EOF")
+            print("Syntax error at EOF: Unexpected end of input")
+
 
