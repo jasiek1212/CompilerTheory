@@ -129,6 +129,18 @@ class TreePrinter:
         self.condition.printTree(indent + 1)
         self.body.printTree(indent + 1)
 
+    @addToClass(AST.BreakStatement)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}BREAK")
+    
+    @addToClass(AST.ContinueStatement)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}CONTINUE")
+
+    @addToClass(AST.BlankStatement)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}BLANK")
+
     @addToClass(AST.Error)
     def printTree(self, indent=0):
         pass
