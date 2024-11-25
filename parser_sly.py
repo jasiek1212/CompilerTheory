@@ -188,9 +188,9 @@ class Mparser(Parser):
 
         return AST.ForNode(myID, start, end, body, lineno=p.lineno)
 
-    @_('WHILE "(" expression ")"')
+    @_('WHILE "(" expression ")" instruction')
     def while_loop(self, p):
-        pass
+        return AST.WhileNode(p[2], p[4], lineno=p.lineno)
 
     @_('PRINT value_list ";"')
     def print_stmt(self, p):

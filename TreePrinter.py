@@ -93,12 +93,6 @@ class TreePrinter:
         print(f"{'|  ' * indent}PRINT")
         self.value.printTree(indent)
 
-    @addToClass(AST.WhileNode)
-    def printTree(self, indent=0):
-        print(f"{'|  ' * indent}WHILE")
-        self.condition.printTree(indent)
-        self.body.printTree(indent + 1)
-
     @addToClass(AST.IfElseNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}IF")
@@ -108,7 +102,6 @@ class TreePrinter:
 
         if self.has_else:
             print(f"{'|  ' * indent}ELSE")
-        # self.else_body.printTree(indent + 1)
 
     @addToClass(AST.ValueListNode)
     def printTree(self, indent=0):
@@ -129,6 +122,12 @@ class TreePrinter:
     def printTree(self, indent=0):
         """Prints the tree representation of a StringNode."""
         print(f"{'|  ' * indent}STRING: {self.name}")
+
+    @addToClass(AST.WhileNode)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}WHILE")
+        self.condition.printTree(indent + 1)
+        self.body.printTree(indent + 1)
 
     @addToClass(AST.Error)
     def printTree(self, indent=0):
