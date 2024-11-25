@@ -114,8 +114,11 @@ class TreePrinter:
 
     @addToClass(AST.ValueListNode)
     def printTree(self, indent=0):
-        #TODO 
-        pass
+        """Prints the tree representation of a ValueListNode."""
+        print(f"{'|  ' * indent}VALUE_LIST")
+        for i, value in enumerate(self.values):
+            print(f"{'|  ' * (indent + 1)}Element {i + 1}:")
+            value.printTree(indent + 2)
 
     @addToClass(AST.Error)
     def printTree(self, indent=0):

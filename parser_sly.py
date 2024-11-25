@@ -154,7 +154,7 @@ class Mparser(Parser):
        )
     def expression(self, p):
         if (len(p) == 2):
-            return p[1]
+            return -p[1]
         return p[0]
 
     @_('value_list "," expression',
