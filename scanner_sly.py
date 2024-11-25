@@ -53,10 +53,10 @@ class Scanner(Lexer):
     RANGE       = r':'
     TRANSPOSE   = r"'"
 
-    @_(r'else if')
-    def ELSE_IF(self, t):
-        t.type = 'ELSE_IF'
-        return t
+    # @_(r'else if')
+    # def ELSE_IF(self, t):
+    #     t.type = 'ELSE_IF'
+    #     return t
 
     
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')

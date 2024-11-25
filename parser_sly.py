@@ -175,17 +175,9 @@ class Mparser(Parser):
 
         condition = p[2]
         if_body = p[4]
-        else_body = None
+        has_else = len(p) == 6
 
-        try:
-            if p.ELSE:
-                else_body = p[6]
-        except:
-            pass
-
-        return AST.IfElseNode(condition, if_body, else_body, lineno=p.lineno)
-
-    # Handles else-if chains and else clause
+        return AST.IfElseNode(condition, if_body, has_else, lineno=p.lineno)
 
     @_('FOR ID ASSIGN expression RANGE expression instruction')
     def for_loop(self, p):
@@ -202,7 +194,7 @@ class Mparser(Parser):
 
     @_('PRINT value_list ";"')
     def print_stmt(self, p):
-        pass
+        return AST.PrintNode(p[1], lineno=p.lineno)
 
     @_('INTNUM',
        'FLOATNUM')

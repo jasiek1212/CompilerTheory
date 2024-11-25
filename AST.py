@@ -172,11 +172,11 @@ class ForNode(Node):
 
 
 class IfElseNode(Node):
-    def __init__(self, condition, if_body, else_body=None, lineno=0):
+    def __init__(self, condition, if_body, has_else, lineno=0):
         super().__init__(lineno)
         self.condition = condition
         self.if_body = if_body
-        self.else_body = else_body
+        self.has_else = has_else
 
 
 class StringNode(Node):
