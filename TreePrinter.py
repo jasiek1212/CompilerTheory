@@ -82,7 +82,7 @@ class TreePrinter:
     @addToClass(AST.ForNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}FOR")
-        print(f"{'|  ' * (indent + 1)}{self.variable}")
+        print(f"{'|  ' * (indent + 1)}{self.ID}")
         print(f"{'|  ' * (indent + 1)}RANGE")
         self.start.printTree(indent + 2)
         self.end.printTree(indent + 2)
