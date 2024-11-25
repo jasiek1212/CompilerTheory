@@ -19,7 +19,7 @@ class Scanner(Lexer):
     
     tokens = [ 'ID', 'EQ', 'NEQ', 'LE', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'DOTADD', 'DOTSUB', 
                'DOTMUL', 'DOTDIV', 'ASSIGN', 'ADDASSIGN', 'SUBASSIGN', 'MULASSIGN', 'DIVASSIGN', 
-               'LT', 'GT', 'RANGE', 'TRANSPOSE', 'INTNUM', 'FLOATNUM', 'STRING', 'ELSE_IF'] + list(keywords.values())
+               'LT', 'GT', 'RANGE', 'TRANSPOSE', 'INTNUM', 'FLOATNUM', 'STRING'] + list(keywords.values())
     
     literals = {'{', '}', '[', ']', ',', ';', '(', ')' }
 

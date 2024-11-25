@@ -1,5 +1,8 @@
 from sly import Parser
-from scanner_sly import Scanner 
+from scanner_sly import Scanner
+import AST
+from TreePrinter import *
+
 
 class Mparser(Parser):
     tokens = Scanner.tokens
@@ -11,7 +14,6 @@ class Mparser(Parser):
     precedence = (
         ('nonassoc', 'JUST_IF'),
         ('nonassoc', 'ELSE'),
-        ('nonassoc', 'ELSE_IF'),
         ('left', 'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE'),
         ("left", 'PLUS', 'MINUS'),
         ("left", 'DOTADD', 'DOTSUB'),
@@ -23,44 +25,71 @@ class Mparser(Parser):
 
     @_('instructions')
     def program(self, p):
-        pass
-
+        return p[0]
 
     @_('instruction',
        'instructions instruction')
     def instructions(self, p):
-        pass  
 
+        if len(p) == 1:
+            return AST.InstructionsNode([p[0]], lineno=p.lineno)
 
-    @_('end_line_instruction ";"',
+        instructions = p[0].instructions.copy()
+        instructions.append(p[1])
+
+        return AST.InstructionsNode(instructions, lineno=p.lineno)
+
+    @_('end_line_instruction',
        'non_end_instruction',
        '"{" instructions "}"')
     def instruction(self, p):
-        pass  
+        if len(p) == 1:
+            return p[0]
+        return p[1]
 
-    @_('assignment',
-       'break_stmt',
-       'continue_stmt',
-       'return_stmt',
+    @_('";"',
+       'assignment',
+       'BREAK ";"',
+       'CONTINUE ";"',
        'print_stmt',
+       'RETURN expression ";"'
        )
     def end_line_instruction(self, p):
-        pass
+        try:
+            if p.BREAK:
+                return AST.BreakStatement(lineno=p.lineno)
+        except:
+            pass
+        try:
+            if p.CONTINUE:
+                return AST.ContinueStatement(lineno=p.lineno)
+        except:
+            pass
+        try:
+            if p.RETURN:
+                return AST.ReturnStatement(p[1], lineno=p.lineno)
+        except:
+            pass
+
+        if p[0] == ";":
+            return AST.BlankStatement(lineno=p.lineno)
+        return p[0]
 
     @_('if_statement',
        'for_loop',
        'while_loop'
        )
     def non_end_instruction(self, p):
-        pass
+        return p[0]
 
-    @_('ID ASSIGN expression',
-       'ID ADDASSIGN expression',
-       'ID SUBASSIGN expression',
-       'ID MULASSIGN expression',
-       'ID DIVASSIGN expression')
+    @_('ID ASSIGN expression ";"',
+       'ID ADDASSIGN expression ";"',
+       'ID SUBASSIGN expression ";"',
+       'ID MULASSIGN expression ";"',
+       'ID DIVASSIGN expression ";"')
     def assignment(self, p):
-        pass
+        myID = AST.IDNode(p[0], lineno=p.lineno)
+        return AST.AssignExpression(myID, p[1], p[2], lineno=p.lineno)
 
     @_('NUMBER',
        'ID',
@@ -71,7 +100,21 @@ class Mparser(Parser):
        'expression_transpose TRANSPOSE'
        )
     def factor(self, p):
-        pass
+        try:
+            if p.ID:
+                return AST.IDNode(p[0], lineno=p.lineno)
+        except:
+            pass
+        try:
+            if p.STRING:
+                return AST.StringNode(p[0], lineno=p.lineno)
+        except:
+            pass
+        if len(p) == 2:
+            return AST.TransposeNode(p[0], lineno=p.lineno)
+        if len(p) == 1:
+            return p[0]
+        return p[1]
 
     @_('expression PLUS expression',
        'expression MINUS expression',
@@ -89,72 +132,79 @@ class Mparser(Parser):
        'expression NEQ expression'
        )
     def expression_bin(self, p):
-        pass
+        return AST.Bin_RelExprNode(p[1], p[0], p[2], lineno=p.lineno)
 
     @_('expression %prec NEGATE')
     def expression_negate(self, p):
-        pass  
+        return AST.NegateExprNode(p[0], lineno=p.lineno)
 
     @_('factor %prec TRANSPOSE')
     def expression_transpose(self, p):
-        pass  
+        return AST.TransposeNode(p[0], lineno=p.lineno)
 
     @_('ZEROS "(" expression ")"',
        'ONES "(" expression ")"',
        'EYE "(" expression ")"')
     def matrix_function(self, p):
-        pass  
-
+        func_name = p[0]
+        arg = p[2]
+        return AST.MatrixFuncNode(func_name, arg, lineno=p.lineno)
 
     @_('MINUS expression_negate',
        'expression_bin',
        'factor'
        )
     def expression(self, p):
-        pass  
-    
+        if (len(p) == 2):
+            return AST.ExpressionNode(-1, p[1], lineno=p.lineno)
+        return p[0]
+
     @_('value_list "," expression',
        'expression')
     def value_list(self, p):
-        pass
+
+        if len(p) == 1:
+            values = [p[0]]
+        else:
+            values = p[0].values.copy()
+            values.append(p[2])
+
+        return AST.ValueListNode(values, lineno=p.lineno)
 
     @_('IF "(" expression ")" instruction %prec JUST_IF',
-       'IF "(" expression ")" instruction else_if_chain')
+       'IF "(" expression ")" instruction ELSE')
     def if_statement(self, p):
-        pass
+
+        condition = p[2]
+        if_body = p[4]
+        else_body = None
+
+        try:
+            if p.ELSE:
+                else_body = p[6]
+        except:
+            pass
+
+        return AST.IfElseNode(condition, if_body, else_body, lineno=p.lineno)
 
     # Handles else-if chains and else clause
-    @_('ELSE_IF "(" expression ")" instruction',
-       'ELSE_IF "(" expression ")" instruction else_if_chain',
-       'ELSE instruction'
-    )
-    def else_if_chain(self, p):
-        pass
-
 
     @_('FOR ID ASSIGN expression RANGE expression instruction')
     def for_loop(self, p):
-        pass  
+        myID = AST.IDNode(p[1], lineno=p.lineno)
+        start = p[3]
+        end = p[5]
+        body = p[6]
 
-    @_('WHILE "(" expression ")" instruction')
+        return AST.ForNode(myID, start, end, body, lineno=p.lineno)
+
+    @_('WHILE "(" expression ")"')
     def while_loop(self, p):
-        pass  
+        pass
 
-    @_('BREAK')
-    def break_stmt(self, p):
-        pass  
-
-    @_('CONTINUE')
-    def continue_stmt(self, p):
-        pass  
-
-    @_('RETURN expression')
-    def return_stmt(self, p):
-        pass  
-
-    @_('PRINT value_list')
+    @_('PRINT value_list ";"')
     def print_stmt(self, p):
-        pass  
+        pass
 
     @_('INTNUM',
        'FLOATNUM')
@@ -166,5 +216,3 @@ class Mparser(Parser):
             print(f"Syntax error at line {p.lineno}: Unexpected token '{p.value}' of type '{p.type}'")
         else:
             print("Syntax error at EOF: Unexpected end of input")
-
-
