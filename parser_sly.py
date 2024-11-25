@@ -110,9 +110,7 @@ class Mparser(Parser):
                 return AST.StringNode(p[0], lineno=p.lineno)
         except:
             pass
-        if len(p) == 2:
-            return AST.TransposeNode(p[0], lineno=p.lineno)
-        if len(p) == 1:
+        if len(p) == 1 or len(p) == 2:
             return p[0]
         return p[1]
 
@@ -156,7 +154,7 @@ class Mparser(Parser):
        )
     def expression(self, p):
         if (len(p) == 2):
-            return AST.ExpressionNode(-1, p[1], lineno=p.lineno)
+            return p[1]
         return p[0]
 
     @_('value_list "," expression',
