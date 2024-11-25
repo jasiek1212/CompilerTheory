@@ -207,7 +207,9 @@ class Mparser(Parser):
     @_('INTNUM',
        'FLOATNUM')
     def NUMBER(self, p):
-        pass
+        if isinstance(p[0], float):
+            return AST.FloatNum(p[0], lineno=p.lineno)
+        return AST.IntNum(p[0], lineno=p.lineno)
 
     def error(self, p):
         if p:

@@ -112,6 +112,11 @@ class TreePrinter:
         print(f"{'|  ' * indent}ELSE")
         self.else_body.printTree(indent + 1)
 
+    @addToClass(AST.ValueListNode)
+    def printTree(self, indent=0):
+        #TODO 
+        pass
+
     @addToClass(AST.Error)
     def printTree(self, indent=0):
         pass

@@ -81,7 +81,7 @@ class TransposeNode(Node):
 
 class MatrixFuncNode(Node):
     def __init__(self, func, expr, lineno):
-        super.__init__(lineno)
+        super().__init__(lineno)
         self.func = func
         self.expr = expr
 
@@ -130,9 +130,6 @@ class NumberNode(Node):
     def __init__(self, number, lineno):
         super().__init__(lineno)
         self.number = number
-
-    pass
-
 
 class IntNum(Node):
     def __init__(self, value, lineno):
