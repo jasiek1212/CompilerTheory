@@ -170,14 +170,15 @@ class Mparser(Parser):
         return AST.ValueListNode(values, lineno=p.lineno)
 
     @_('IF "(" expression ")" instruction %prec JUST_IF',
-       'IF "(" expression ")" instruction ELSE')
+       'IF "(" expression ")" instruction ELSE instruction')
     def if_statement(self, p):
 
         condition = p[2]
         if_body = p[4]
-        has_else = len(p) == 6
+        has_else = len(p) == 7
+        else_body = p[6] if has_else else None
 
-        return AST.IfElseNode(condition, if_body, has_else, lineno=p.lineno)
+        return AST.IfElseNode(condition, if_body, has_else, else_body, lineno=p.lineno)
 
     @_('FOR ID ASSIGN expression RANGE expression instruction')
     def for_loop(self, p):

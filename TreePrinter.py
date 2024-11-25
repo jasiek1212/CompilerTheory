@@ -36,6 +36,14 @@ class TreePrinter:
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}{self.name}")
 
+    @addToClass(AST.BreakStatement)
+    def printTree(self, indent = 0):
+        print(f"{'|  ' * indent}BREAK")
+
+    @addToClass(AST.ContinueStatement)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}CONTINUE")
+
     @addToClass(AST.ExpressionNode)
     def printTree(self, indent=0):
         if self.typ == -1:
@@ -78,11 +86,15 @@ class TreePrinter:
         print(f"{'|  ' * indent}TRANSPOSE")
         self.factor.printTree(indent + 1)
 
+    @addToClass(AST.BlankStatement)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent};")
+
 
     @addToClass(AST.ForNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}FOR")
-        print(f"{'|  ' * (indent + 1)}{self.ID}")
+        self.ID.printTree(indent+1)
         print(f"{'|  ' * (indent + 1)}RANGE")
         self.start.printTree(indent + 2)
         self.end.printTree(indent + 2)
@@ -102,6 +114,7 @@ class TreePrinter:
 
         if self.has_else:
             print(f"{'|  ' * indent}ELSE")
+            self.else_body.printTree(indent+1)
 
     @addToClass(AST.ValueListNode)
     def printTree(self, indent=0):

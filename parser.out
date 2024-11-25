@@ -52,7 +52,7 @@ Rule 48    expression -> expression_bin
 Rule 49    expression -> MINUS expression_negate  [precedence=left, level=4]
 Rule 50    value_list -> expression
 Rule 51    value_list -> value_list , expression
-Rule 52    if_statement -> IF ( expression ) instruction ELSE  [precedence=nonassoc, level=2]
+Rule 52    if_statement -> IF ( expression ) instruction ELSE instruction  [precedence=nonassoc, level=2]
 Rule 53    if_statement -> IF ( expression ) instruction  [precedence=nonassoc, level=1]
 Rule 54    for_loop -> FOR ID ASSIGN expression RANGE expression instruction
 Rule 55    while_loop -> WHILE ( expression ) instruction
@@ -120,7 +120,7 @@ expression_transpose : 21
 factor               : 43 47
 for_loop             : 14
 if_statement         : 15
-instruction          : 2 3 52 53 54 55
+instruction          : 2 3 52 52 53 54 55
 instructions         : 1 2 4
 matrix_function      : 22
 non_end_instruction  : 5
@@ -150,7 +150,7 @@ state 0
     (12) end_line_instruction -> . ;
     (55) while_loop -> . WHILE ( expression ) instruction
     (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
-    (52) if_statement -> . IF ( expression ) instruction ELSE
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
     (53) if_statement -> . IF ( expression ) instruction
     (56) print_stmt -> . PRINT value_list ;
     (16) assignment -> . ID DIVASSIGN expression ;
@@ -203,7 +203,7 @@ state 2
     (12) end_line_instruction -> . ;
     (55) while_loop -> . WHILE ( expression ) instruction
     (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
-    (52) if_statement -> . IF ( expression ) instruction ELSE
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
     (53) if_statement -> . IF ( expression ) instruction
     (56) print_stmt -> . PRINT value_list ;
     (16) assignment -> . ID DIVASSIGN expression ;
@@ -268,7 +268,7 @@ state 4
     (12) end_line_instruction -> . ;
     (55) while_loop -> . WHILE ( expression ) instruction
     (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
-    (52) if_statement -> . IF ( expression ) instruction ELSE
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
     (53) if_statement -> . IF ( expression ) instruction
     (56) print_stmt -> . PRINT value_list ;
     (16) assignment -> . ID DIVASSIGN expression ;
@@ -532,7 +532,7 @@ state 18
 
 state 19
 
-    (52) if_statement -> IF . ( expression ) instruction ELSE
+    (52) if_statement -> IF . ( expression ) instruction ELSE instruction
     (53) if_statement -> IF . ( expression ) instruction
     (               shift and go to state 48
 
@@ -626,7 +626,7 @@ state 22
     (12) end_line_instruction -> . ;
     (55) while_loop -> . WHILE ( expression ) instruction
     (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
-    (52) if_statement -> . IF ( expression ) instruction ELSE
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
     (53) if_statement -> . IF ( expression ) instruction
     (56) print_stmt -> . PRINT value_list ;
     (16) assignment -> . ID DIVASSIGN expression ;
@@ -1493,7 +1493,7 @@ state 47
 
 state 48
 
-    (52) if_statement -> IF ( . expression ) instruction ELSE
+    (52) if_statement -> IF ( . expression ) instruction ELSE instruction
     (53) if_statement -> IF ( . expression ) instruction
     (47) expression -> . factor
     (48) expression -> . expression_bin
@@ -2903,7 +2903,7 @@ state 81
 
 state 82
 
-    (52) if_statement -> IF ( expression . ) instruction ELSE
+    (52) if_statement -> IF ( expression . ) instruction ELSE instruction
     (53) if_statement -> IF ( expression . ) instruction
     (28) expression_bin -> expression . NEQ expression
     (29) expression_bin -> expression . EQ expression
@@ -3850,7 +3850,7 @@ state 104
     (12) end_line_instruction -> . ;
     (55) while_loop -> . WHILE ( expression ) instruction
     (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
-    (52) if_statement -> . IF ( expression ) instruction ELSE
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
     (53) if_statement -> . IF ( expression ) instruction
     (56) print_stmt -> . PRINT value_list ;
     (16) assignment -> . ID DIVASSIGN expression ;
@@ -4004,7 +4004,7 @@ state 110
 
 state 111
 
-    (52) if_statement -> IF ( expression ) . instruction ELSE
+    (52) if_statement -> IF ( expression ) . instruction ELSE instruction
     (53) if_statement -> IF ( expression ) . instruction
     (4) instruction -> . { instructions }
     (5) instruction -> . non_end_instruction
@@ -4020,7 +4020,7 @@ state 111
     (12) end_line_instruction -> . ;
     (55) while_loop -> . WHILE ( expression ) instruction
     (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
-    (52) if_statement -> . IF ( expression ) instruction ELSE
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
     (53) if_statement -> . IF ( expression ) instruction
     (56) print_stmt -> . PRINT value_list ;
     (16) assignment -> . ID DIVASSIGN expression ;
@@ -4257,7 +4257,7 @@ state 117
 
 state 118
 
-    (52) if_statement -> IF ( expression ) instruction . ELSE
+    (52) if_statement -> IF ( expression ) instruction . ELSE instruction
     (53) if_statement -> IF ( expression ) instruction .
     ELSE            shift and go to state 120
     {               reduce using rule 53 (if_statement -> IF ( expression ) instruction .)
@@ -4305,7 +4305,7 @@ state 119
     (12) end_line_instruction -> . ;
     (55) while_loop -> . WHILE ( expression ) instruction
     (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
-    (52) if_statement -> . IF ( expression ) instruction ELSE
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
     (53) if_statement -> . IF ( expression ) instruction
     (56) print_stmt -> . PRINT value_list ;
     (16) assignment -> . ID DIVASSIGN expression ;
@@ -4349,21 +4349,48 @@ state 119
 
 state 120
 
-    (52) if_statement -> IF ( expression ) instruction ELSE .
-    {               reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    RETURN          reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    CONTINUE        reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    BREAK           reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    ;               reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    WHILE           reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    FOR             reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    IF              reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    PRINT           reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    ID              reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    $end            reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    }               reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
-    ELSE            reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE .)
+    (52) if_statement -> IF ( expression ) instruction ELSE . instruction
+    (4) instruction -> . { instructions }
+    (5) instruction -> . non_end_instruction
+    (6) instruction -> . end_line_instruction
+    (13) non_end_instruction -> . while_loop
+    (14) non_end_instruction -> . for_loop
+    (15) non_end_instruction -> . if_statement
+    (7) end_line_instruction -> . RETURN expression ;
+    (8) end_line_instruction -> . print_stmt
+    (9) end_line_instruction -> . CONTINUE ;
+    (10) end_line_instruction -> . BREAK ;
+    (11) end_line_instruction -> . assignment
+    (12) end_line_instruction -> . ;
+    (55) while_loop -> . WHILE ( expression ) instruction
+    (54) for_loop -> . FOR ID ASSIGN expression RANGE expression instruction
+    (52) if_statement -> . IF ( expression ) instruction ELSE instruction
+    (53) if_statement -> . IF ( expression ) instruction
+    (56) print_stmt -> . PRINT value_list ;
+    (16) assignment -> . ID DIVASSIGN expression ;
+    (17) assignment -> . ID MULASSIGN expression ;
+    (18) assignment -> . ID SUBASSIGN expression ;
+    (19) assignment -> . ID ADDASSIGN expression ;
+    (20) assignment -> . ID ASSIGN expression ;
+    {               shift and go to state 4
+    RETURN          shift and go to state 10
+    CONTINUE        shift and go to state 13
+    BREAK           shift and go to state 14
+    ;               shift and go to state 11
+    WHILE           shift and go to state 16
+    FOR             shift and go to state 17
+    IF              shift and go to state 19
+    PRINT           shift and go to state 20
+    ID              shift and go to state 18
 
+    instruction                    shift and go to state 122
+    non_end_instruction            shift and go to state 5
+    end_line_instruction           shift and go to state 6
+    while_loop                     shift and go to state 7
+    for_loop                       shift and go to state 8
+    if_statement                   shift and go to state 9
+    print_stmt                     shift and go to state 12
+    assignment                     shift and go to state 15
 
 state 121
 
@@ -4381,3 +4408,21 @@ state 121
     $end            reduce using rule 54 (for_loop -> FOR ID ASSIGN expression RANGE expression instruction .)
     }               reduce using rule 54 (for_loop -> FOR ID ASSIGN expression RANGE expression instruction .)
     ELSE            reduce using rule 54 (for_loop -> FOR ID ASSIGN expression RANGE expression instruction .)
+
+
+state 122
+
+    (52) if_statement -> IF ( expression ) instruction ELSE instruction .
+    {               reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    RETURN          reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    CONTINUE        reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    BREAK           reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    ;               reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    WHILE           reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    FOR             reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    IF              reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    PRINT           reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    ID              reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    $end            reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    }               reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)
+    ELSE            reduce using rule 52 (if_statement -> IF ( expression ) instruction ELSE instruction .)

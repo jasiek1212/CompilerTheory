@@ -1,8 +1,8 @@
 import sys
 from sly import Lexer
 
+
 class Scanner(Lexer):
-    
     keywords = {
         'if': 'IF',
         'else': 'ELSE',
@@ -16,49 +16,48 @@ class Scanner(Lexer):
         'ones': 'ONES',
         'print': 'PRINT'
     }
-    
-    tokens = [ 'ID', 'EQ', 'NEQ', 'LE', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'DOTADD', 'DOTSUB', 
-               'DOTMUL', 'DOTDIV', 'ASSIGN', 'ADDASSIGN', 'SUBASSIGN', 'MULASSIGN', 'DIVASSIGN', 
-               'LT', 'GT', 'RANGE', 'TRANSPOSE', 'INTNUM', 'FLOATNUM', 'STRING'] + list(keywords.values())
-    
-    literals = {'{', '}', '[', ']', ',', ';', '(', ')' }
+
+    tokens = ['ID', 'EQ', 'NEQ', 'LE', 'GE', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'DOTADD', 'DOTSUB',
+              'DOTMUL', 'DOTDIV', 'ASSIGN', 'ADDASSIGN', 'SUBASSIGN', 'MULASSIGN', 'DIVASSIGN',
+              'LT', 'GT', 'RANGE', 'TRANSPOSE', 'INTNUM', 'FLOATNUM', 'STRING'] + list(keywords.values())
+
+    literals = {'{', '}', '[', ']', ',', ';', '(', ')'}
 
     ignore = ' \t'
     ignore_comment = r'\#.*'
-    
-    EQ          = r'=='
-    
-    ADDASSIGN   = r'\+='
-    SUBASSIGN   = r'-='
-    MULASSIGN   = r'\*='
-    DIVASSIGN   = r'/='
-    ASSIGN      = r'='
 
-    PLUS        = r'\+'
-    MINUS       = r'-'
-    TIMES       = r'\*'
-    DIVIDE      = r'/'
-    
-    DOTADD      = r'\.\+'
-    DOTSUB      = r'\.-'
-    DOTMUL      = r'\.\*'
-    DOTDIV      = r'\./'
-    
-    LE          = r'<='
-    GE          = r'>='
-    NEQ         = r'!='
-    LT          = r'<'
-    GT          = r'>'
-    
-    RANGE       = r':'
-    TRANSPOSE   = r"'"
+    EQ = r'=='
+
+    ADDASSIGN = r'\+='
+    SUBASSIGN = r'-='
+    MULASSIGN = r'\*='
+    DIVASSIGN = r'/='
+    ASSIGN = r'='
+
+    PLUS = r'\+'
+    MINUS = r'-'
+    TIMES = r'\*'
+    DIVIDE = r'/'
+
+    DOTADD = r'\.\+'
+    DOTSUB = r'\.-'
+    DOTMUL = r'\.\*'
+    DOTDIV = r'\./'
+
+    LE = r'<='
+    GE = r'>='
+    NEQ = r'!='
+    LT = r'<'
+    GT = r'>'
+
+    RANGE = r':'
+    TRANSPOSE = r"'"
 
     # @_(r'else if')
     # def ELSE_IF(self, t):
     #     t.type = 'ELSE_IF'
     #     return t
 
-    
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
     def ID(self, t):
         t.type = self.keywords.get(t.value, 'ID')
@@ -100,6 +99,6 @@ if __name__ == '__main__':
 
     text = file.read()
     lexer = Scanner()
-    
+
     for tok in lexer.tokenize(text):
         print(f"({tok.lineno}): {tok.type}({tok.value})")
