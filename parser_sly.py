@@ -82,14 +82,39 @@ class Mparser(Parser):
     def non_end_instruction(self, p):
         return p[0]
 
-    @_('ID ASSIGN expression ";"',
-       'ID ADDASSIGN expression ";"',
-       'ID SUBASSIGN expression ";"',
-       'ID MULASSIGN expression ";"',
-       'ID DIVASSIGN expression ";"')
+    @_('id_all ASSIGN expression ";"',
+       'id_all ADDASSIGN expression ";"',
+       'id_all SUBASSIGN expression ";"',
+       'id_all MULASSIGN expression ";"',
+       'id_all DIVASSIGN expression ";"')
     def assignment(self, p):
+        return AST.AssignExpression(p[0], p[1], p[2], lineno=p.lineno)
+
+    @_('ID',
+       'matrix_ref')
+    def id_all(self, p):
+        try:
+            if (p.ID):
+                return AST.IDNode(p[0], lineno=p.lineno)
+        except:
+            pass
+
+        return p[0]
+
+    @_('INTNUM',
+       'string_of_ints "," INTNUM')
+    def string_of_ints(self, p):
+        if len(p) == 1:
+            ints = [AST.IntNum(p[0], lineno=p.lineno)]
+        else:
+            ints = p[0].ints.copy()
+            ints.append(AST.IntNum(p[2], lineno=p.lineno))
+        return AST.StringOfIntsNode(ints, lineno=p.lineno)
+
+    @_('ID "[" string_of_ints "]" ')
+    def matrix_ref(self, p):
         myID = AST.IDNode(p[0], lineno=p.lineno)
-        return AST.AssignExpression(myID, p[1], p[2], lineno=p.lineno)
+        return AST.MatrixRefNode(myID, p[2], lineno=p.lineno)
 
     @_('NUMBER',
        'ID',

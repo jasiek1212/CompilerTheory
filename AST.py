@@ -78,21 +78,23 @@ class TransposeNode(Node):
 
     pass
 
+class StringOfIntsNode(Node):
+    def __init__(self, ints, lineno):
+        super().__init__(lineno)
+        self.ints = ints
+
+class MatrixRefNode(Node):
+    def __init__(self, ID, slices, lineno):
+        super().__init__(lineno)
+        self.ID= ID
+        self.slices = slices
+
 
 class MatrixFuncNode(Node):
     def __init__(self, func, expr, lineno):
         super().__init__(lineno)
         self.func = func
         self.expr = expr
-
-    pass
-
-
-class ExpressionNode(Node):
-    def __init__(self, typ, inside, lineno):
-        super().__init__(lineno)
-        self.typ = typ
-        self.inside = inside
 
     pass
 

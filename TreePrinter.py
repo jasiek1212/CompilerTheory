@@ -25,6 +25,17 @@ class TreePrinter:
         for instr in self.instructions:
             instr.printTree(indent)
 
+    @addToClass(AST.StringOfIntsNode)
+    def printTree(self, indent=0):
+        for int_i in self.ints:
+            int_i.printTree(indent)
+
+    @addToClass(AST.MatrixRefNode)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}REF")
+        self.ID.printTree(indent+1)
+        self.slices.printTree(indent+1)
+
 
     @addToClass(AST.Bin_RelExprNode)
     def printTree(self, indent=0):
@@ -44,13 +55,6 @@ class TreePrinter:
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}CONTINUE")
 
-    @addToClass(AST.ExpressionNode)
-    def printTree(self, indent=0):
-        if self.typ == -1:
-            print(f"{'|  ' * indent}MINUS")
-            self.inside.printTree(indent + 1)
-        else:
-            self.inside.printTree(indent)
 
     @addToClass(AST.MatrixFuncNode)
     def printTree(self, indent=0):
@@ -118,23 +122,20 @@ class TreePrinter:
 
     @addToClass(AST.ValueListNode)
     def printTree(self, indent=0):
-        """Prints the tree representation of a ValueListNode."""
         print(f"{'|  ' * indent}VALUE_LIST")
-        for i, value in enumerate(self.values):
-            print(f"{'|  ' * (indent + 1)}Element {i + 1}:")
-            value.printTree(indent + 2)
+        for value in self.values:
+            value.printTree(indent + 1)
 
     @addToClass(AST.ReturnStatement)
     def printTree(self, indent=0):
-        """Prints the tree representation of a ReturnStatement node."""
         print(f"{'|  ' * indent}RETURN")
         if self.expr:
             self.expr.printTree(indent + 1)
 
     @addToClass(AST.StringNode)
     def printTree(self, indent=0):
-        """Prints the tree representation of a StringNode."""
         print(f"{'|  ' * indent}STRING: {self.name}")
+
 
     @addToClass(AST.WhileNode)
     def printTree(self, indent=0):
