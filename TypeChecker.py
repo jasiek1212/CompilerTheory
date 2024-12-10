@@ -69,7 +69,6 @@ class TypeChecker(NodeVisitor):
 
     def new_error(self, line, message):
         self.errors.append(f"Error at line {line}: {message}")
-        self.print_errors()
 
     def visit_InstructionsNode(self, node):
         for instruction in node.instructions:
@@ -112,7 +111,6 @@ class TypeChecker(NodeVisitor):
 
         if type == "":
             self.new_error(node.lineno, f"Unsuppported operation: {op} on types: {type1} and {type2}!")
-            #TODO zmienic error na lepszy zapis, np ze nie obsluguje danej operacji na tych typach
 
         if (type != "" and type1 == "matrix" and type2 == "matrix"):
             m1, m2 = node.left, node.right
