@@ -87,7 +87,8 @@ class TypeChecker(NodeVisitor):
         var_type = type
 
         if type == 'matrix':
-            node.left.size = node.right.size            
+            node.left.size = node.right.size
+            size = node.right.size            
 
 
         if var_type is None:
@@ -112,21 +113,21 @@ class TypeChecker(NodeVisitor):
             self.new_error(node.lineno, "Unknown type!")
 
         if (type != "" and type1 == "matrix" and type2 == "matrix" 
-            and isinstance(node.left.expr, AST.IDNode) and isinstance(node.right.expr, AST.IDNode)): # x d   X D
-            m1 = self.current_scope.get(node.left.expr.name)
-            m2 = self.current_scope.get(node.right.expr.name)
-
-            if m1.row_sizes != m2.row_sizes and (op == ".+" or op == ".-" or op == ".*" or op =="./"):
+            and isinstance(node.left, AST.IDNode) and isinstance(node.right, AST.IDNode)): # x d   X D
+            m1 = self.current_scope.get(node.left.name)
+            m2 = self.current_scope.get(node.right.name)
+            print(m1.size, m2.size)
+            if m1.size != m2.size and (op == ".+" or op == ".-" or op == ".*" or op =="./"):
                 self.new_error(
                     node.lineno, "Operations (.+|.-|.*|./) on matrices with unequal sizes!")
 
             if m1.size == 0 or m2.size == 0:
                 self.new_error(
                     node.lineno, "Can not perform multiplication on empty matrix!")
-            elif m1.size != m2.row_sizes[0] and op == "*":
-                self.new_error(
-                    node.lineno, "Operation (*) on matrices with incorrect sizes!")
-
+            # elif m1.size != m2.row_sizes[0] and op == "*":
+            #     self.new_error(
+            #         node.lineno, "Operation (*) on matrices with incorrect sizes!")
+            node.size = m1.size
         return type
     
     def visit_MatrixFuncNode(self, node):
@@ -176,9 +177,11 @@ class TypeChecker(NodeVisitor):
     def visit_ValueListNode(self, node):
         same_rows_size = True  # Zakładamy, że wszystkie wiersze są tej samej wielkości
         matrix_size = None  # Zmienna do przechowywania wymiarów macierzy
+        is_3d = False
         for value in node.values:
             value_type = self.visit(value)  # Sprawdzamy typ wartości
             if isinstance(value, AST.MatrixFuncNode):
+                is_3d = True
                 size = value.size
                 
                 rows = size[0]
@@ -192,6 +195,8 @@ class TypeChecker(NodeVisitor):
             elif isinstance(value, AST.ValueListNode):
                 rows = len(value.values)
                 cols = len(value.values[0].values) if isinstance(value.values, AST.ValueListNode) else 1 # Zakładając, że pierwsza 'wiersz' nie jest pusty
+                if cols > 1: 
+                    is_3d = True
                 print(matrix_size, rows, cols)
                 if matrix_size is None:
                     matrix_size = (rows, cols)
@@ -208,7 +213,11 @@ class TypeChecker(NodeVisitor):
         if not same_rows_size:
             self.new_error(node.lineno, f"Matrix dimensions mismatch in value list at line {node.lineno}")
             return None
-        node.size = (len(node.values), matrix_size[0], matrix_size[1]) if matrix_size else (1, len(node.values))
+        if is_3d:
+            node.size = (len(node.values), matrix_size[0], matrix_size[1])
+        else:
+            node.size = (len(node.values), rows) if matrix_size else (1, len(node.values))
+        print(node.size)
         return 'matrix'
         
 
