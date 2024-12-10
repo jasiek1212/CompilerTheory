@@ -20,12 +20,6 @@ else if(N>=0) {
     print "N>=0";
 }
 
-if(N<10) {
-    print "N<10";
-}
-else if(N<=15)
-    print "N<=15";
-
 k = 10;
 while(k>0)
     k = k - 1;

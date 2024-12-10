@@ -100,7 +100,7 @@ class TypeChecker(NodeVisitor):
         self.current_scope.put(var_name, var)
 
     def visit_Bin_RelExprNode(self, node):
-        if node.op in [Sc.EQ, Sc.GE, Sc.LT, Sc.LT, Sc.GT, Sc.NEQ]:
+        if node.op in [Sc.EQ, Sc.GE, Sc.LT, Sc.LE, Sc.GT, Sc.NEQ]:
             self.visit(node.left)
             self.visit(node.right)
             return "int"
@@ -273,7 +273,7 @@ class TypeChecker(NodeVisitor):
         self.current_scope = self.current_scope.pushScope("for")
         
         var = VariableSymbol(node.ID, "int", None, [])
-        self.current_scope.put(node.ID, var)
+        self.current_scope.put(node.ID.name, var)
 
         self.visit(node.start)
         self.visit(node.end)
@@ -298,16 +298,15 @@ class TypeChecker(NodeVisitor):
 
     def visit_IfElseNode(self, node):
         self.current_scope = self.current_scope.pushScope("if")
-
         self.visit(node.condition)
         self.visit(node.if_body)
 
         self.current_scope = self.current_scope.parent
-        if (node.else_body == None):
+
+        if node.else_body is None:
             return
 
-        self.current_scope = self.current_scope.popScope()
-
+        self.current_scope = self.current_scope.pushScope("else")
         self.visit(node.else_body)
 
         self.current_scope = self.current_scope.parent
@@ -322,9 +321,13 @@ class TypeChecker(NodeVisitor):
         self.new_error(node.lineno, "Incorrect break statement use!")
 
     def visit_ContinueStatement(self, node):
-        if (not (self.current_scope.name == "for" or
-           self.current_scope.name == "while")):
-            self.new_error(node.lineno, "Incorrect continue statement use!")
+        reached_scope = self.current_scope
+        while reached_scope is not None:
+            if (reached_scope.name == "for" or reached_scope.name == "while"):
+                return
+            reached_scope = reached_scope.parent
+        self.new_error(node.lineno, "Incorrect continue statement use!")
+
 
     def visit_ReturnStatement(self, node):
         pass
