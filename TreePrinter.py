@@ -16,7 +16,7 @@ class TreePrinter:
     def printTree(self, indent=0):
         raise Exception("printTree not defined in class " + self.__class__.__name__)
 
-    @addToClass(AST.programNode)
+    @addToClass(AST.ProgramNode)
     def printTree(self, indent=0):
         self.instructions.printTree(indent)
 

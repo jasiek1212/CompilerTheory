@@ -2,8 +2,6 @@ class Node(object):
     def __init__(self, lineno):
         self.lineno = lineno
 
-    pass
-
 
 class InstructionsNode(Node):
     def __init__(self, instructions, lineno):
@@ -11,9 +9,7 @@ class InstructionsNode(Node):
         self.instructions = instructions
 
 
-
-
-class programNode(Node):
+class ProgramNode(Node):
     def __init__(self, instructions, lineno):
         super().__init__(lineno)
         self.instructions = instructions
@@ -86,7 +82,7 @@ class StringOfIntsNode(Node):
 class MatrixRefNode(Node):
     def __init__(self, ID, slices, lineno):
         super().__init__(lineno)
-        self.ID= ID
+        self.ID = ID
         self.slices = slices
 
 
