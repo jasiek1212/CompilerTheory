@@ -76,59 +76,57 @@ class TypeChecker(NodeVisitor):
         except:
             print("Tu sie wywala: ", instruction, node.lineno)
 
-    def visit_AssignExpression(self, node):
-        # ADD NEW VAR TO SCOPE
-        type = self.visit(node.right)
+    # def visit_AssignExpression(self, node):
+    #     type = self.visit(node.right)
 
+    #     if (isinstance(node.left, AST.MatrixRefNode)):
+    #         return  # to jest coś typu x[1] = 0;
 
-        if (isinstance(node.left, AST.MatrixRefNode)):
-            return  # to jest coś typu x[1] = 0;
+    #     var_name = node.left.value
+    #     var_type = "var"
+    #     size = None
+    #     row_sizes = []
+    #     # z jakiegoś powodu MatrixNode nie jest z ExpressionNode a reszta tak
+    #     if (isinstance(node.right, AST.MatrixNode)):
+    #         var_type = "matrix"
+    #         size = len(node.right.values.values)
+    #         for row in node.right.values.values:
+    #             if (isinstance(row, AST.StringOfNumNode)):
+    #                 row_sizes.append(len(row.values))
 
-        var_name = node.left.value
-        var_type = "var"
-        size = None
-        row_sizes = []
-        # z jakiegoś powodu MatrixNode nie jest z ExpressionNode a reszta tak
-        if (isinstance(node.right, AST.MatrixNode)):
-            var_type = "matrix"
-            size = len(node.right.values.values)
-            for row in node.right.values.values:
-                if (isinstance(row, AST.StringOfNumNode)):
-                    row_sizes.append(len(row.values))
+    #     elif (isinstance(node.right, AST.BinExpr)):
+    #         var_type = type
 
-        elif (isinstance(node.right, AST.BinExpr)):
-            var_type = type
+    #     elif (isinstance(node.right.expr, AST.IntNum)):
+    #         var_type = "int"
+    #     elif (isinstance(node.right.expr, AST.FloatNum)):
+    #         var_type = "float"
+    #     elif (isinstance(node.right.expr, AST.StringNode)):
+    #         var_type = "string"
+    #     elif (isinstance(node.right.expr, AST.MatrixFuncNode)):
+    #         var_type = "matrix"
+    #         size = node.right.expr.arg
+    #         for row in range(size):
+    #             row_sizes.append(size)
 
-        elif (isinstance(node.right.expr, AST.IntNum)):
-            var_type = "int"
-        elif (isinstance(node.right.expr, AST.FloatNum)):
-            var_type = "float"
-        elif (isinstance(node.right.expr, AST.StringNode)):
-            var_type = "string"
-        elif (isinstance(node.right.expr, AST.MatrixFuncNode)):
-            var_type = "matrix"
-            size = node.right.expr.arg
-            for row in range(size):
-                row_sizes.append(size)
+    #     # MATRIX INITIALIZATION CHECK
+    #     if (isinstance(node.right, AST.MatrixNode)):
+    #         row_len = -1
+    #         if (isinstance(node.right.values, AST.MatrixRowsNode)):
+    #             for row in node.right.values.values:  # xd2
+    #                 if (row_len == -1):
+    #                     row_len = len(row.values)
+    #                 elif (len(row.values) != row_len):
+    #                     self.new_error(
+    #                         node.lineno, "Incorrect size of matrix rows!")
+    #                     return
+    #     # -----------------------------
 
-        # MATRIX INITIALIZATION CHECK
-        if (isinstance(node.right, AST.MatrixNode)):
-            row_len = -1
-            if (isinstance(node.right.values, AST.MatrixRowsNode)):
-                for row in node.right.values.values:  # xd2
-                    if (row_len == -1):
-                        row_len = len(row.values)
-                    elif (len(row.values) != row_len):
-                        self.new_error(
-                            node.lineno, "Incorrect size of matrix rows!")
-                        return
-        # -----------------------------
+    #     var = VariableSymbol(var_name, var_type, size, row_sizes)
 
-        var = VariableSymbol(var_name, var_type, size, row_sizes)
-
-        if var_type != "":
-            self.current_scope.put(var_name, var)
-            self.visit(node.left)
+    #     if var_type != "":
+    #         self.current_scope.put(var_name, var)
+    #         self.visit(node.left)
 
     def visit_AssignExpression(self, node):
         var_type = None
@@ -143,22 +141,28 @@ class TypeChecker(NodeVisitor):
         var_name = node.left.name
 
         if type == 'matrix':
-            var_type = "matrix"
-            size = len(node.right.values.values)
-            for row in node.right.values.values:
-                if isinstance(row, AST.StringOfIntsNode):
-                    row_sizes.append(len(row.ints))
+            var_type = 'matrix'
 
-            # Sprawdzenie poprawności inicjalizacji macierzy
-            row_len = -1
-            for row in node.right.values.values:
-                if row_len == -1:
-                    row_len = len(row.ints)
-                elif len(row.ints) != row_len:
-                    self.new_error(node.lineno, "Incorrect size of matrix rows!")
-                    return
+            size = node.right.size
+            if isinstance(node.right, AST.MatrixFuncNode):
+                node.left.size = size
+                print(size)
+            else:
+                #from here on i dont know if it works
+                for row in node.right.values.values:
+                    if isinstance(row, AST.StringOfIntsNode):
+                        row_sizes.append(len(row.ints))
 
-        elif isinstance(node.right, AST.BinExpr):
+                # Sprawdzenie poprawności inicjalizacji macierzy
+                row_len = -1
+                for row in node.right.values.values:
+                    if row_len == -1:
+                        row_len = len(row.ints)
+                    elif len(row.ints) != row_len:
+                        self.new_error(node.lineno, "Incorrect size of matrix rows!")
+                        return
+
+        elif isinstance(node.right, AST.Bin_RelExprNode):
             var_type = type
 
         elif isinstance(node.right, AST.IntNum):
@@ -170,26 +174,13 @@ class TypeChecker(NodeVisitor):
         elif isinstance(node.right, AST.StringNode):
             var_type = "string"
 
-        elif isinstance(node.right, AST.MatrixFuncNode):
-            var_type = "matrix"
-            func_type = self.visit(node.right)  # Funkcja, np. zeros/ones/eye
-            if func_type == "matrix":
-                if isinstance(node.right.expr, AST.IntNum):
-                    size = node.right.expr.value
-                    row_sizes = [size] * size  # Kwadratowa macierz
-                elif isinstance(node.right.expr, AST.ValueList):
-                    size = len(node.right.expr.values)
-                    row_sizes = [len(node.right.expr.values)] * size
 
-        # Jeśli typ nie został rozpoznany, zgłoś błąd
         if var_type is None:
             self.new_error(node.lineno, "Unknown type in assignment!")
             return
 
-        # Tworzenie nowej zmiennej
-        var = VariableSymbol(var_name, var_type, size, row_sizes)
+        var = VariableSymbol(var_name, var_type, size)
 
-        # Dodanie zmiennej do bieżącego scope
         self.current_scope.put(var_name, var)
 
     def visit_Bin_RelExprNode(self, node):
@@ -198,20 +189,28 @@ class TypeChecker(NodeVisitor):
         return self.visit_BinExpr(self, node)
     
     def visit_MatrixFuncNode(self, node):
-        # Sprawdź, czy node.expr to poprawna instancja
-        if not isinstance(node.expr, (AST.IntNum, AST.ValueListNode)):
-            self.new_error(node.lineno, "Function argument must be an integer or a list of values!")
+        # Sprawdź, czy argument wyrażenia `node.expr` jest poprawny
+        expr_type = self.visit(node.expr)
+        print(expr_type)
+
+        if expr_type not in ["int", "float"]:
+            self.new_error(node.lineno, f"Invalid argument type for {node.func}: {expr_type}")
             return None
 
-        if node.func == 'zeros':
-            return self.visit_ZerosNode(node)
-        elif node.func == 'ones':
-            return self.visit_OnesNode(node)
-        elif node.func == 'eye':
-            return self.visit_EyeNode(node)
+        # Wylicz wielkość macierzy
+        if isinstance(node.expr, AST.IntNum):
+            size = node.expr.value
+        elif isinstance(node.expr, AST.Bin_RelExprNode):
+            size = self.evaluate_constant_expression(node.expr)
+            if size is None or size <= 0:
+                self.new_error(node.lineno, f"Invalid dimensions for {node.func}: {node.expr}")
+                return None
         else:
-            self.new_error(node.lineno, f"Unknown matrix function '{node.func}'")
+            self.new_error(node.lineno, f"Unsupported expression for {node.func}: {node.expr}")
             return None
+
+        node.size = (size, size)
+        return "matrix"
 
     def visit_RelationExpression(self, node):
         self.visit(node.left)
@@ -238,6 +237,7 @@ class TypeChecker(NodeVisitor):
         return "matrix"
 
     def visit_ValueListNode(self, node):
+        node.size = len(node.values)
         self.visit(node.values)
 
     def visit_MatrixRowsNode(self, node):
@@ -391,3 +391,21 @@ class TypeChecker(NodeVisitor):
                     f"{scope.name.upper()} -> name: {name}, type: {symbol.type}, size: {symbol.size}, rows: {symbol.row_sizes}")
             else:
                 print(f"{scope.name.upper()} -> name: {name}, type: {symbol.type}")
+
+    def evaluate_constant_expression(self, node):
+        """Prosta metoda do obliczania wartości wyrażeń stałych."""
+        if isinstance(node, AST.IntNum):
+            return node.value
+        elif isinstance(node, AST.BinExpr):
+            left = self.evaluate_constant_expression(node.left)
+            right = self.evaluate_constant_expression(node.right)
+            if left is not None and right is not None:
+                if node.op == "+":
+                    return left + right
+                elif node.op == "-":
+                    return left - right
+                elif node.op == "*":
+                    return left * right
+                elif node.op == "/":
+                    return left // right if right != 0 else None
+        return None
