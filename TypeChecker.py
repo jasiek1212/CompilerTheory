@@ -10,6 +10,7 @@ ttype["+"]["int"]["int"] = "int"
 ttype["+"]["int"]["float"] = "float"
 ttype["+"]["float"]["int"] = "float"
 ttype["+"]["float"]["float"] = "float"
+ttype["+"]["matrix"]["matrix"] = "matrix"
 
 ttype["-"]["int"]["int"] = "int"
 ttype["-"]["int"]["float"] = "float"
@@ -112,21 +113,23 @@ class TypeChecker(NodeVisitor):
         if type == "":
             self.new_error(node.lineno, "Unknown type!")
 
-        if (type != "" and type1 == "matrix" and type2 == "matrix" 
-            and isinstance(node.left, AST.IDNode) and isinstance(node.right, AST.IDNode)): # x d   X D
-            m1 = self.current_scope.get(node.left.name)
-            m2 = self.current_scope.get(node.right.name)
+        if (type != "" and type1 == "matrix" and type2 == "matrix"):
+            m1, m2 = node.left, node.right
+            if isinstance(node.left, AST.IDNode):
+                m1 = self.current_scope.get(node.left.name)
+            if isinstance(node.right, AST.IDNode):
+                m2 = self.current_scope.get(node.right.name)
             print(m1.size, m2.size)
             if m1.size != m2.size and (op == ".+" or op == ".-" or op == ".*" or op =="./"):
                 self.new_error(
                     node.lineno, "Operations (.+|.-|.*|./) on matrices with unequal sizes!")
+            if (len(m1.size) > 2 or len(m2.size) > 2 or m1.size[1] != m2.size[0]) and (op == "*"):
+               self.new_error(
+                    node.lineno, "Operations (*) on matrices with unequal sizes!")                
 
             if m1.size == 0 or m2.size == 0:
                 self.new_error(
                     node.lineno, "Can not perform multiplication on empty matrix!")
-            # elif m1.size != m2.row_sizes[0] and op == "*":
-            #     self.new_error(
-            #         node.lineno, "Operation (*) on matrices with incorrect sizes!")
             node.size = m1.size
         return type
     
@@ -221,10 +224,6 @@ class TypeChecker(NodeVisitor):
         return 'matrix'
         
 
-    def visit_MatrixRowsNode(self, node):
-        for value in node.values:
-            self.visit(value)
-
     def visit_StringOfNumNode(self, node):
         pass
 
@@ -258,16 +257,29 @@ class TypeChecker(NodeVisitor):
         return "float"
 
     def visit_NegateExprNode(self, node):
-        return self.visit(node.expr)
+        type = self.visit(node.expr)
+        if type == 'matrix':
+            node.size = node.expr.size
+        return type
+            
 
     def visit_IDNode(self, node):
         var = self.current_scope.get(node.name)
         if (var == None):
             self.new_error(node.lineno, "Unknown variable!")
+        if var.type == 'matrix':
+            node.size = var.size
         return var.type
 
     def visit_TransposeNode(self, node):
-        return self.visit(node.expr)
+        type = self.visit(node.factor)
+        if type != 'matrix':
+            self.new_error(node.lineno, "Transposition of not a matrix!")
+        if len(node.factor.size) > 2:
+            self.new_error(node.lineno, "Cannot transpose matrix of more dimensions than 2!")
+        node.size = node.factor.size[1], node.factor.size[0]
+        return 'matrix'
+
 
     def visit_ForNode(self, node):
         self.current_scope = self.current_scope.pushScope("for")

@@ -1,7 +1,8 @@
 # assignment operators
 # binary operators
 # transposition
-
+A = zeros(5);
+B = eye(5);
 D1 = A.+B' ; # add element-wise A with transpose of B
 D2 -= A.-B' ; # substract element-wise A with transpose of B
 D3 *= A.*B' ; # multiply element-wise A with transpose of B

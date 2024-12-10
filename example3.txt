@@ -1,7 +1,6 @@
-A = eye(5);
-B = zeros(5);
-
-C = -A;     # assignemnt with unary expression
+A = zeros(5);
+B = eye(5);
+D1 = A.+B' ; # add element-wise A with transpose of B
 
 
 
