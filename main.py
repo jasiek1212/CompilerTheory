@@ -20,9 +20,10 @@ if __name__ == '__main__':
     text = file.read()
     ast = parser.parse(lexer.tokenize(text))
     typeChecker = TypeChecker()
+    #uncomment the following lines to print the AST:
+    #ast.printTree()
 
     typeChecker.visit(ast)
     if typeChecker.errors:
         print("- TYPE CHECKER ERROR -")
         typeChecker.print_errors()
-# print(ast)

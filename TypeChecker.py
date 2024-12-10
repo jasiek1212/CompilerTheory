@@ -172,8 +172,8 @@ class TypeChecker(NodeVisitor):
                 if matrix_size is None:
                     matrix_size = (rows, cols)
                 elif matrix_size != (rows, cols):
-                    self.new_error(node.lineno, f"Matrix dimensions mismatch in value list at line {node.lineno}")
                     same_rows_size = False
+                    break
             elif isinstance(value, AST.ValueListNode):
                 rows = len(value.values)
                 cols = len(value.values[0].values) if isinstance(value.values, AST.ValueListNode) else 1 # Zakładając, że pierwsza 'wiersz' nie jest pusty
@@ -182,14 +182,14 @@ class TypeChecker(NodeVisitor):
                 if matrix_size is None:
                     matrix_size = (rows, cols)
                 elif matrix_size != (rows, cols):
-                    self.new_error(node.lineno, f"Matrix dimensions mismatch in value list at line {node.lineno}")
                     same_rows_size = False
+                    break
             else:
                 if matrix_size is None:
                     matrix_size = 0
                 elif matrix_size != 0:
-                    self.new_error(node.lineno, f"Matrix dimensions mismatch in value list at line {node.lineno}")
                     same_rows_size = False
+                    break
 
         if not same_rows_size:
             self.new_error(node.lineno, f"Matrix dimensions mismatch in value list at line {node.lineno}")
@@ -207,6 +207,8 @@ class TypeChecker(NodeVisitor):
 
     def visit_MatrixRefNode(self, node):
         self.visit(node.slices)
+        if len(node.slices.ints) > 2:
+            self.new_error(node.lineno, "Matrix reference of 3-or more- dimensional matrices is unsupported!")
 
         matrix = self.current_scope.get(node.ID.name)
         if not matrix:
