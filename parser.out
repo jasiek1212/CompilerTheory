@@ -31,7 +31,7 @@ Rule 27    factor -> matrix_function
 Rule 28    factor -> [ value_list ]
 Rule 29    factor -> ( expression )
 Rule 30    factor -> STRING
-Rule 31    factor -> ID
+Rule 31    factor -> id_all
 Rule 32    factor -> NUMBER
 Rule 33    expression_bin -> expression NEQ expression  [precedence=left, level=3]
 Rule 34    expression_bin -> expression EQ expression  [precedence=left, level=3]
@@ -88,7 +88,7 @@ FLOATNUM             : 62
 FOR                  : 59
 GE                   : 36
 GT                   : 38
-ID                   : 22 25 31 59
+ID                   : 22 25 59
 IF                   : 57 58
 INTNUM               : 23 24 63
 LE                   : 35
@@ -124,7 +124,7 @@ expression_negate    : 54
 expression_transpose : 26
 factor               : 48 52
 for_loop             : 14
-id_all               : 16 17 18 19 20
+id_all               : 16 17 18 19 20 31
 if_statement         : 15
 instruction          : 2 3 57 57 58 59 60
 instructions         : 1 2 4
@@ -421,7 +421,7 @@ state 10
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -441,16 +441,19 @@ state 10
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -459,7 +462,9 @@ state 10
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 11
 
@@ -548,6 +553,35 @@ state 18
     SUBASSIGN       reduce using rule 22 (id_all -> ID .)
     ADDASSIGN       reduce using rule 22 (id_all -> ID .)
     ASSIGN          reduce using rule 22 (id_all -> ID .)
+    ;               reduce using rule 22 (id_all -> ID .)
+    NEQ             reduce using rule 22 (id_all -> ID .)
+    EQ              reduce using rule 22 (id_all -> ID .)
+    LE              reduce using rule 22 (id_all -> ID .)
+    GE              reduce using rule 22 (id_all -> ID .)
+    LT              reduce using rule 22 (id_all -> ID .)
+    GT              reduce using rule 22 (id_all -> ID .)
+    DOTDIV          reduce using rule 22 (id_all -> ID .)
+    DOTMUL          reduce using rule 22 (id_all -> ID .)
+    DIVIDE          reduce using rule 22 (id_all -> ID .)
+    TIMES           reduce using rule 22 (id_all -> ID .)
+    DOTSUB          reduce using rule 22 (id_all -> ID .)
+    DOTADD          reduce using rule 22 (id_all -> ID .)
+    MINUS           reduce using rule 22 (id_all -> ID .)
+    PLUS            reduce using rule 22 (id_all -> ID .)
+    TRANSPOSE       reduce using rule 22 (id_all -> ID .)
+    ,               reduce using rule 22 (id_all -> ID .)
+    ]               reduce using rule 22 (id_all -> ID .)
+    )               reduce using rule 22 (id_all -> ID .)
+    RANGE           reduce using rule 22 (id_all -> ID .)
+    {               reduce using rule 22 (id_all -> ID .)
+    RETURN          reduce using rule 22 (id_all -> ID .)
+    CONTINUE        reduce using rule 22 (id_all -> ID .)
+    BREAK           reduce using rule 22 (id_all -> ID .)
+    WHILE           reduce using rule 22 (id_all -> ID .)
+    FOR             reduce using rule 22 (id_all -> ID .)
+    IF              reduce using rule 22 (id_all -> ID .)
+    PRINT           reduce using rule 22 (id_all -> ID .)
+    ID              reduce using rule 22 (id_all -> ID .)
     [               shift and go to state 45
 
 
@@ -571,7 +605,7 @@ state 20
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -591,16 +625,19 @@ state 20
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -610,7 +647,9 @@ state 20
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 21
 
@@ -634,6 +673,35 @@ state 22
     SUBASSIGN       reduce using rule 21 (id_all -> matrix_ref .)
     ADDASSIGN       reduce using rule 21 (id_all -> matrix_ref .)
     ASSIGN          reduce using rule 21 (id_all -> matrix_ref .)
+    ;               reduce using rule 21 (id_all -> matrix_ref .)
+    NEQ             reduce using rule 21 (id_all -> matrix_ref .)
+    EQ              reduce using rule 21 (id_all -> matrix_ref .)
+    LE              reduce using rule 21 (id_all -> matrix_ref .)
+    GE              reduce using rule 21 (id_all -> matrix_ref .)
+    LT              reduce using rule 21 (id_all -> matrix_ref .)
+    GT              reduce using rule 21 (id_all -> matrix_ref .)
+    DOTDIV          reduce using rule 21 (id_all -> matrix_ref .)
+    DOTMUL          reduce using rule 21 (id_all -> matrix_ref .)
+    DIVIDE          reduce using rule 21 (id_all -> matrix_ref .)
+    TIMES           reduce using rule 21 (id_all -> matrix_ref .)
+    DOTSUB          reduce using rule 21 (id_all -> matrix_ref .)
+    DOTADD          reduce using rule 21 (id_all -> matrix_ref .)
+    MINUS           reduce using rule 21 (id_all -> matrix_ref .)
+    PLUS            reduce using rule 21 (id_all -> matrix_ref .)
+    TRANSPOSE       reduce using rule 21 (id_all -> matrix_ref .)
+    ,               reduce using rule 21 (id_all -> matrix_ref .)
+    ]               reduce using rule 21 (id_all -> matrix_ref .)
+    )               reduce using rule 21 (id_all -> matrix_ref .)
+    RANGE           reduce using rule 21 (id_all -> matrix_ref .)
+    {               reduce using rule 21 (id_all -> matrix_ref .)
+    RETURN          reduce using rule 21 (id_all -> matrix_ref .)
+    CONTINUE        reduce using rule 21 (id_all -> matrix_ref .)
+    BREAK           reduce using rule 21 (id_all -> matrix_ref .)
+    WHILE           reduce using rule 21 (id_all -> matrix_ref .)
+    FOR             reduce using rule 21 (id_all -> matrix_ref .)
+    IF              reduce using rule 21 (id_all -> matrix_ref .)
+    PRINT           reduce using rule 21 (id_all -> matrix_ref .)
+    ID              reduce using rule 21 (id_all -> matrix_ref .)
 
 
 state 23
@@ -819,7 +887,7 @@ state 28
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -839,16 +907,19 @@ state 28
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -858,7 +929,9 @@ state 28
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 29
 
@@ -913,7 +986,7 @@ state 31
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -933,16 +1006,19 @@ state 31
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -952,7 +1028,9 @@ state 31
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 32
 
@@ -965,7 +1043,7 @@ state 32
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -985,16 +1063,19 @@ state 32
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1003,7 +1084,9 @@ state 32
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 33
 
@@ -1041,36 +1124,36 @@ state 33
 
 state 34
 
-    (31) factor -> ID .
-    ;               reduce using rule 31 (factor -> ID .)
-    NEQ             reduce using rule 31 (factor -> ID .)
-    EQ              reduce using rule 31 (factor -> ID .)
-    LE              reduce using rule 31 (factor -> ID .)
-    GE              reduce using rule 31 (factor -> ID .)
-    LT              reduce using rule 31 (factor -> ID .)
-    GT              reduce using rule 31 (factor -> ID .)
-    DOTDIV          reduce using rule 31 (factor -> ID .)
-    DOTMUL          reduce using rule 31 (factor -> ID .)
-    DIVIDE          reduce using rule 31 (factor -> ID .)
-    TIMES           reduce using rule 31 (factor -> ID .)
-    DOTSUB          reduce using rule 31 (factor -> ID .)
-    DOTADD          reduce using rule 31 (factor -> ID .)
-    MINUS           reduce using rule 31 (factor -> ID .)
-    PLUS            reduce using rule 31 (factor -> ID .)
-    TRANSPOSE       reduce using rule 31 (factor -> ID .)
-    ,               reduce using rule 31 (factor -> ID .)
-    ]               reduce using rule 31 (factor -> ID .)
-    )               reduce using rule 31 (factor -> ID .)
-    RANGE           reduce using rule 31 (factor -> ID .)
-    {               reduce using rule 31 (factor -> ID .)
-    RETURN          reduce using rule 31 (factor -> ID .)
-    CONTINUE        reduce using rule 31 (factor -> ID .)
-    BREAK           reduce using rule 31 (factor -> ID .)
-    WHILE           reduce using rule 31 (factor -> ID .)
-    FOR             reduce using rule 31 (factor -> ID .)
-    IF              reduce using rule 31 (factor -> ID .)
-    PRINT           reduce using rule 31 (factor -> ID .)
-    ID              reduce using rule 31 (factor -> ID .)
+    (31) factor -> id_all .
+    ;               reduce using rule 31 (factor -> id_all .)
+    NEQ             reduce using rule 31 (factor -> id_all .)
+    EQ              reduce using rule 31 (factor -> id_all .)
+    LE              reduce using rule 31 (factor -> id_all .)
+    GE              reduce using rule 31 (factor -> id_all .)
+    LT              reduce using rule 31 (factor -> id_all .)
+    GT              reduce using rule 31 (factor -> id_all .)
+    DOTDIV          reduce using rule 31 (factor -> id_all .)
+    DOTMUL          reduce using rule 31 (factor -> id_all .)
+    DIVIDE          reduce using rule 31 (factor -> id_all .)
+    TIMES           reduce using rule 31 (factor -> id_all .)
+    DOTSUB          reduce using rule 31 (factor -> id_all .)
+    DOTADD          reduce using rule 31 (factor -> id_all .)
+    MINUS           reduce using rule 31 (factor -> id_all .)
+    PLUS            reduce using rule 31 (factor -> id_all .)
+    TRANSPOSE       reduce using rule 31 (factor -> id_all .)
+    ,               reduce using rule 31 (factor -> id_all .)
+    ]               reduce using rule 31 (factor -> id_all .)
+    )               reduce using rule 31 (factor -> id_all .)
+    RANGE           reduce using rule 31 (factor -> id_all .)
+    {               reduce using rule 31 (factor -> id_all .)
+    RETURN          reduce using rule 31 (factor -> id_all .)
+    CONTINUE        reduce using rule 31 (factor -> id_all .)
+    BREAK           reduce using rule 31 (factor -> id_all .)
+    WHILE           reduce using rule 31 (factor -> id_all .)
+    FOR             reduce using rule 31 (factor -> id_all .)
+    IF              reduce using rule 31 (factor -> id_all .)
+    PRINT           reduce using rule 31 (factor -> id_all .)
+    ID              reduce using rule 31 (factor -> id_all .)
 
 
 state 35
@@ -1240,7 +1323,7 @@ state 43
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1260,16 +1343,19 @@ state 43
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1278,7 +1364,9 @@ state 43
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 44
 
@@ -1307,7 +1395,7 @@ state 46
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1327,16 +1415,19 @@ state 46
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1345,7 +1436,9 @@ state 46
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 47
 
@@ -1402,7 +1495,7 @@ state 49
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1422,25 +1515,30 @@ state 49
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
+    id_all                         shift and go to state 34
     expression                     shift and go to state 85
     factor                         shift and go to state 26
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 50
 
@@ -1453,7 +1551,7 @@ state 50
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1473,25 +1571,30 @@ state 50
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
+    id_all                         shift and go to state 34
     expression                     shift and go to state 86
     factor                         shift and go to state 26
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 51
 
@@ -1504,7 +1607,7 @@ state 51
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1524,25 +1627,30 @@ state 51
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
+    id_all                         shift and go to state 34
     expression                     shift and go to state 87
     factor                         shift and go to state 26
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 52
 
@@ -1555,7 +1663,7 @@ state 52
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1575,25 +1683,30 @@ state 52
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
+    id_all                         shift and go to state 34
     expression                     shift and go to state 88
     factor                         shift and go to state 26
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 53
 
@@ -1606,7 +1719,7 @@ state 53
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1626,25 +1739,30 @@ state 53
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
+    id_all                         shift and go to state 34
     expression                     shift and go to state 89
     factor                         shift and go to state 26
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 54
 
@@ -1693,7 +1811,7 @@ state 56
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1713,16 +1831,19 @@ state 56
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1731,7 +1852,9 @@ state 56
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 57
 
@@ -1744,7 +1867,7 @@ state 57
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1764,16 +1887,19 @@ state 57
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1782,7 +1908,9 @@ state 57
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 58
 
@@ -1795,7 +1923,7 @@ state 58
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1815,16 +1943,19 @@ state 58
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1833,7 +1964,9 @@ state 58
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 59
 
@@ -1846,7 +1979,7 @@ state 59
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1866,16 +1999,19 @@ state 59
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1884,7 +2020,9 @@ state 59
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 60
 
@@ -1897,7 +2035,7 @@ state 60
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1917,16 +2055,19 @@ state 60
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1935,7 +2076,9 @@ state 60
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 61
 
@@ -1948,7 +2091,7 @@ state 61
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -1968,16 +2111,19 @@ state 61
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -1986,7 +2132,9 @@ state 61
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 62
 
@@ -1999,7 +2147,7 @@ state 62
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2019,16 +2167,19 @@ state 62
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2037,7 +2188,9 @@ state 62
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 63
 
@@ -2050,7 +2203,7 @@ state 63
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2070,16 +2223,19 @@ state 63
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2088,7 +2244,9 @@ state 63
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 64
 
@@ -2101,7 +2259,7 @@ state 64
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2121,16 +2279,19 @@ state 64
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2139,7 +2300,9 @@ state 64
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 65
 
@@ -2152,7 +2315,7 @@ state 65
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2172,16 +2335,19 @@ state 65
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2190,7 +2356,9 @@ state 65
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 66
 
@@ -2203,7 +2371,7 @@ state 66
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2223,16 +2391,19 @@ state 66
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2241,7 +2412,9 @@ state 66
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 67
 
@@ -2254,7 +2427,7 @@ state 67
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2274,16 +2447,19 @@ state 67
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2292,7 +2468,9 @@ state 67
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 68
 
@@ -2305,7 +2483,7 @@ state 68
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2325,16 +2503,19 @@ state 68
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2343,7 +2524,9 @@ state 68
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 69
 
@@ -2356,7 +2539,7 @@ state 69
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2376,16 +2559,19 @@ state 69
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2394,7 +2580,9 @@ state 69
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 70
 
@@ -2563,7 +2751,7 @@ state 75
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2583,16 +2771,19 @@ state 75
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2601,7 +2792,9 @@ state 75
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 76
 
@@ -2614,7 +2807,7 @@ state 76
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2634,16 +2827,19 @@ state 76
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2652,7 +2848,9 @@ state 76
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 77
 
@@ -2665,7 +2863,7 @@ state 77
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2685,16 +2883,19 @@ state 77
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2703,7 +2904,9 @@ state 77
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 78
 
@@ -2750,7 +2953,7 @@ state 79
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2770,16 +2973,19 @@ state 79
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2788,7 +2994,9 @@ state 79
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 80
 
@@ -2869,7 +3077,7 @@ state 84
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -2889,16 +3097,19 @@ state 84
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -2907,7 +3118,9 @@ state 84
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 85
 
@@ -3999,6 +4212,35 @@ state 111
     SUBASSIGN       reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
     ADDASSIGN       reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
     ASSIGN          reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    ;               reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    NEQ             reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    EQ              reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    LE              reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    GE              reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    LT              reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    GT              reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    DOTDIV          reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    DOTMUL          reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    DIVIDE          reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    TIMES           reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    DOTSUB          reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    DOTADD          reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    MINUS           reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    PLUS            reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    TRANSPOSE       reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    ,               reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    ]               reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    )               reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    RANGE           reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    {               reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    RETURN          reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    CONTINUE        reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    BREAK           reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    WHILE           reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    FOR             reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    IF              reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    PRINT           reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
+    ID              reduce using rule 25 (matrix_ref -> ID [ string_of_ints ] .)
 
 
 state 112
@@ -4315,7 +4557,7 @@ state 124
     (28) factor -> . [ value_list ]
     (29) factor -> . ( expression )
     (30) factor -> . STRING
-    (31) factor -> . ID
+    (31) factor -> . id_all
     (32) factor -> . NUMBER
     (33) expression_bin -> . expression NEQ expression
     (34) expression_bin -> . expression EQ expression
@@ -4335,16 +4577,19 @@ state 124
     (49) matrix_function -> . EYE ( expression )
     (50) matrix_function -> . ONES ( expression )
     (51) matrix_function -> . ZEROS ( expression )
+    (21) id_all -> . matrix_ref
+    (22) id_all -> . ID
     (62) NUMBER -> . FLOATNUM
     (63) NUMBER -> . INTNUM
+    (25) matrix_ref -> . ID [ string_of_ints ]
     MINUS           shift and go to state 28
     [               shift and go to state 31
     (               shift and go to state 32
     STRING          shift and go to state 33
-    ID              shift and go to state 34
     EYE             shift and go to state 36
     ONES            shift and go to state 37
     ZEROS           shift and go to state 38
+    ID              shift and go to state 18
     FLOATNUM        shift and go to state 39
     INTNUM          shift and go to state 40
 
@@ -4353,7 +4598,9 @@ state 124
     expression_bin                 shift and go to state 27
     expression_transpose           shift and go to state 29
     matrix_function                shift and go to state 30
+    id_all                         shift and go to state 34
     NUMBER                         shift and go to state 35
+    matrix_ref                     shift and go to state 22
 
 state 125
 

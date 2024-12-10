@@ -98,7 +98,6 @@ class Mparser(Parser):
                 return AST.IDNode(p[0], lineno=p.lineno)
         except:
             pass
-
         return p[0]
 
     @_('INTNUM',
@@ -117,7 +116,7 @@ class Mparser(Parser):
         return AST.MatrixRefNode(myID, p[2], lineno=p.lineno)
 
     @_('NUMBER',
-       'ID',
+       'id_all',
        'STRING',
        '"(" expression ")"',
        '"[" value_list "]"',

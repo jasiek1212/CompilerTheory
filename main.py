@@ -21,10 +21,11 @@ if __name__ == '__main__':
     ast = parser.parse(lexer.tokenize(text))
     typeChecker = TypeChecker()
 
-    typeChecker.visit(ast)
-    # try:
-    #     typeChecker.visit(ast)
-    # except:
-    #     print("- TYPE CHECKER ERROR -")
-    typeChecker.print_errors()
+    # typeChecker.visit(ast)
+    # typeChecker.print_errors()
+    try:
+        typeChecker.visit(ast)
+    except:
+        print("- TYPE CHECKER ERROR -")
+        typeChecker.print_errors()
 # print(ast)

@@ -111,7 +111,8 @@ class TypeChecker(NodeVisitor):
         type = ttype[op][type1][type2]
 
         if type == "":
-            self.new_error(node.lineno, "Unknown type!")
+            self.new_error(node.lineno, f"Unsuppported operation: {op} on types: {type1} and {type2}!")
+            #TODO zmienic error na lepszy zapis, np ze nie obsluguje danej operacji na tych typach
 
         if (type != "" and type1 == "matrix" and type2 == "matrix"):
             m1, m2 = node.left, node.right
@@ -119,31 +120,22 @@ class TypeChecker(NodeVisitor):
                 m1 = self.current_scope.get(node.left.name)
             if isinstance(node.right, AST.IDNode):
                 m2 = self.current_scope.get(node.right.name)
-            print(m1.size, m2.size)
-            if m1.size != m2.size and (op == ".+" or op == ".-" or op == ".*" or op =="./"):
+            if m1.size != m2.size and (op == ".+" or op == ".-" or op == ".*" or op =="./" or op=="+"):
                 self.new_error(
                     node.lineno, "Operations (.+|.-|.*|./) on matrices with unequal sizes!")
             if (len(m1.size) > 2 or len(m2.size) > 2 or m1.size[1] != m2.size[0]) and (op == "*"):
                self.new_error(
-                    node.lineno, "Operations (*) on matrices with unequal sizes!")                
-
-            if m1.size == 0 or m2.size == 0:
-                self.new_error(
-                    node.lineno, "Can not perform multiplication on empty matrix!")
+                    node.lineno, "Operations (*) on matrices with unequal sizes!")
             node.size = m1.size
         return type
     
     def visit_MatrixFuncNode(self, node):
-        # Sprawdź, czy argument wyrażenia `node.expr` jest poprawny
-        print(node.expr)
         expr_type = self.visit(node.expr)
-        print(expr_type)
 
         if expr_type not in ["int", "float"]:
             self.new_error(node.lineno, f"Invalid argument type for {node.func}: {expr_type}")
             return None
 
-        # Wylicz wielkość macierzy
         if isinstance(node.expr, AST.IntNum):
             size = node.expr.value
         elif isinstance(node.expr, AST.Bin_RelExprNode):
@@ -159,7 +151,6 @@ class TypeChecker(NodeVisitor):
         return "matrix"
 
     def visit_IDRefNode(self, node):
-        # VARIABLE IN SCOPE CHECK
         var = self.current_scope.get(node.value)
         if (var == None):
             self.new_error(
@@ -168,21 +159,11 @@ class TypeChecker(NodeVisitor):
     def visit_ExpressionNode(self, node):
         return self.visit(node.expr)
 
-    def visit_ZerosNode(self, node):
-        return "matrix"
-
-    def visit_OnesNode(self, node):
-        return "matrix"
-
-    def visit_EyeNode(self, node):
-        return "matrix"
-
     def visit_ValueListNode(self, node):
-        same_rows_size = True  # Zakładamy, że wszystkie wiersze są tej samej wielkości
-        matrix_size = None  # Zmienna do przechowywania wymiarów macierzy
+        same_rows_size = True
+        matrix_size = None
         is_3d = False
         for value in node.values:
-            value_type = self.visit(value)  # Sprawdzamy typ wartości
             if isinstance(value, AST.MatrixFuncNode):
                 is_3d = True
                 size = value.size
@@ -200,7 +181,6 @@ class TypeChecker(NodeVisitor):
                 cols = len(value.values[0].values) if isinstance(value.values, AST.ValueListNode) else 1 # Zakładając, że pierwsza 'wiersz' nie jest pusty
                 if cols > 1: 
                     is_3d = True
-                print(matrix_size, rows, cols)
                 if matrix_size is None:
                     matrix_size = (rows, cols)
                 elif matrix_size != (rows, cols):
@@ -228,27 +208,29 @@ class TypeChecker(NodeVisitor):
         pass
 
     def visit_MatrixRefNode(self, node):
-        self.visit(node.values)
+        self.visit(node.slices)
 
-        # VARIABLE IN SCOPE CHECK
-        matrix = self.current_scope.get(node.id)
-        if (not matrix):
+        matrix = self.current_scope.get(node.ID.name)
+        if not matrix:
             self.new_error(node.lineno, "Unknown variable!")
             return
 
-        # MATRIX BOUNDS CHCECK
-        if (matrix.size == None):
+        if matrix.type != "matrix":
             self.new_error(node.lineno, "Variable type error!")
+            return
 
-        args = node.values.values
+        args = node.slices.ints
         if (len(args) == 1):
-            if (args[0] >= matrix.size):
+            if args[0].value >= matrix.size[0]:
                 self.new_error(node.lineno, "Out of array scope!")
-        elif (len(args) == 2):
-            if (args[0] >= matrix.size):
+        elif len(args) == 2:
+            if args[0].value >= matrix.size[0]:
                 self.new_error(node.lineno, "Out of array scope!")
-            elif (args[1] >= matrix.row_sizes[args[0]]):
+            elif args[1].value >= matrix.size[1]:
                 self.new_error(node.lineno, "Out of array scope!")
+        node.size = node.slices.ints
+        print(node.size[0].value, node.size[1].value)
+        return 'matrix'
 
     def visit_IntNum(self, node):
         return "int"
