@@ -185,11 +185,38 @@ class TypeChecker(NodeVisitor):
 
     def visit_Bin_RelExprNode(self, node):
         if node.op in [Sc.EQ, Sc.GE, Sc.LT, Sc.LT, Sc.GT, Sc.NEQ]:
-            return self.visit_RelationExpression(self, node)
-        return self.visit_BinExpr(self, node)
+            self.visit(node.left)
+            self.visit(node.right)
+            return "int"
+        type1 = self.visit(node.left)
+        type2 = self.visit(node.right)
+        op = node.op
+        type = ttype[op][type1][type2]
+
+        if type == "":
+            self.new_error(node.lineno, "Unknown type!")
+
+        if (type != "" and type1 == "matrix" and type2 == "matrix" 
+            and isinstance(node.left.expr, AST.IDNode) and isinstance(node.right.expr, AST.IDNode)): # x d   X D
+            m1 = self.current_scope.get(node.left.expr.name)
+            m2 = self.current_scope.get(node.right.expr.name)
+
+            if m1.row_sizes != m2.row_sizes and (op == ".+" or op == ".-" or op == ".*" or op =="./"):
+                self.new_error(
+                    node.lineno, "Operations (.+|.-|.*|./) on matrices with unequal sizes!")
+
+            if m1.size == 0 or m2.size == 0:
+                self.new_error(
+                    node.lineno, "Can not perform multiplication on empty matrix!")
+            elif m1.size != m2.row_sizes[0] and op == "*":
+                self.new_error(
+                    node.lineno, "Operation (*) on matrices with incorrect sizes!")
+
+        return type
     
     def visit_MatrixFuncNode(self, node):
         # Sprawdź, czy argument wyrażenia `node.expr` jest poprawny
+        print(node.expr)
         expr_type = self.visit(node.expr)
         print(expr_type)
 
@@ -211,11 +238,6 @@ class TypeChecker(NodeVisitor):
 
         node.size = (size, size)
         return "matrix"
-
-    def visit_RelationExpression(self, node):
-        self.visit(node.left)
-        self.visit(node.right)
-        return "int"  # 0/1
 
     def visit_IDRefNode(self, node):
         # VARIABLE IN SCOPE CHECK
@@ -287,34 +309,6 @@ class TypeChecker(NodeVisitor):
 
     def visit_TransposeNode(self, node):
         return self.visit(node.expr)
-
-    def visit_BinExpr(self, node):
-        type1 = self.visit(node.left)
-        type2 = self.visit(node.right)
-        op = node.op
-
-        type = ttype[op][type1][type2]
-
-        if type == "":
-            self.new_error(node.lineno, "Unknown type!")
-
-        if (type != "" and type1 == "matrix" and type2 == "matrix" 
-            and isinstance(node.left.expr, AST.IDNode) and isinstance(node.right.expr, AST.IDNode)): # x d   X D
-            m1 = self.current_scope.get(node.left.expr.name)
-            m2 = self.current_scope.get(node.right.expr.name)
-
-            if m1.row_sizes != m2.row_sizes and (op == ".+" or op == ".-" or op == ".*" or op =="./"):
-                self.new_error(
-                    node.lineno, "Operations (.+|.-|.*|./) on matrices with unequal sizes!")
-
-            if m1.size == 0 or m2.size == 0:
-                self.new_error(
-                    node.lineno, "Can not perform multiplication on empty matrix!")
-            elif m1.size != m2.row_sizes[0] and op == "*":
-                self.new_error(
-                    node.lineno, "Operation (*) on matrices with incorrect sizes!")
-
-        return type
 
     def visit_ForNode(self, node):
         self.current_scope = self.current_scope.pushScope("for")
@@ -396,7 +390,7 @@ class TypeChecker(NodeVisitor):
         """Prosta metoda do obliczania wartości wyrażeń stałych."""
         if isinstance(node, AST.IntNum):
             return node.value
-        elif isinstance(node, AST.BinExpr):
+        elif isinstance(node, AST.Bin_RelExprNode):
             left = self.evaluate_constant_expression(node.left)
             right = self.evaluate_constant_expression(node.right)
             if left is not None and right is not None:

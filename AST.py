@@ -92,37 +92,22 @@ class MatrixFuncNode(Node):
         self.func = func
         self.expr = expr
 
-    pass
-
-
 class BreakStatement(Node):
     def __init__(self, lineno):
         super().__init__(lineno)
 
-    pass
-
-
 class ContinueStatement(Node):
     def __init__(self, lineno):
         super().__init__(lineno)
-
-    pass
-
 
 class ReturnStatement(Node):
     def __init__(self, expr, lineno):
         super().__init__(lineno)
         self.expr = expr
 
-    pass
-
-
 class BlankStatement(Node):
     def __init__(self, lineno):
         super().__init__(lineno)
-
-    pass
-
 
 class NumberNode(Node):
     def __init__(self, number, lineno):
