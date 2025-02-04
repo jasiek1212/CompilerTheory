@@ -3,6 +3,7 @@ import sys
 from parser_sly import Mparser
 from scanner_sly import Scanner
 from TreePrinter import TreePrinter
+from TypeChecker import TypeChecker
 
 
 if __name__ == '__main__':
@@ -18,5 +19,11 @@ if __name__ == '__main__':
     lexer = Scanner()
     text = file.read()
     ast = parser.parse(lexer.tokenize(text))
-    # print(ast)
-    ast.printTree()
+    typeChecker = TypeChecker()
+    #uncomment the following lines to print the AST:
+    #ast.printTree()
+
+    typeChecker.visit(ast)
+    if typeChecker.errors:
+        print("- TYPE CHECKER ERROR -")
+        typeChecker.print_errors()

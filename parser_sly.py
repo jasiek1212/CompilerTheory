@@ -82,17 +82,41 @@ class Mparser(Parser):
     def non_end_instruction(self, p):
         return p[0]
 
-    @_('ID ASSIGN expression ";"',
-       'ID ADDASSIGN expression ";"',
-       'ID SUBASSIGN expression ";"',
-       'ID MULASSIGN expression ";"',
-       'ID DIVASSIGN expression ";"')
+    @_('id_all ASSIGN expression ";"',
+       'id_all ADDASSIGN expression ";"',
+       'id_all SUBASSIGN expression ";"',
+       'id_all MULASSIGN expression ";"',
+       'id_all DIVASSIGN expression ";"')
     def assignment(self, p):
+        return AST.AssignExpression(p[0], p[1], p[2], lineno=p.lineno)
+
+    @_('ID',
+       'matrix_ref')
+    def id_all(self, p):
+        try:
+            if (p.ID):
+                return AST.IDNode(p[0], lineno=p.lineno)
+        except:
+            pass
+        return p[0]
+
+    @_('INTNUM',
+       'string_of_ints "," INTNUM')
+    def string_of_ints(self, p):
+        if len(p) == 1:
+            ints = [AST.IntNum(p[0], lineno=p.lineno)]
+        else:
+            ints = p[0].ints.copy()
+            ints.append(AST.IntNum(p[2], lineno=p.lineno))
+        return AST.StringOfIntsNode(ints, lineno=p.lineno)
+
+    @_('ID "[" string_of_ints "]" ')
+    def matrix_ref(self, p):
         myID = AST.IDNode(p[0], lineno=p.lineno)
-        return AST.AssignExpression(myID, p[1], p[2], lineno=p.lineno)
+        return AST.MatrixRefNode(myID, p[2], lineno=p.lineno)
 
     @_('NUMBER',
-       'ID',
+       'id_all',
        'STRING',
        '"(" expression ")"',
        '"[" value_list "]"',
@@ -170,14 +194,15 @@ class Mparser(Parser):
         return AST.ValueListNode(values, lineno=p.lineno)
 
     @_('IF "(" expression ")" instruction %prec JUST_IF',
-       'IF "(" expression ")" instruction ELSE')
+       'IF "(" expression ")" instruction ELSE instruction')
     def if_statement(self, p):
 
         condition = p[2]
         if_body = p[4]
-        has_else = len(p) == 6
+        has_else = len(p) == 7
+        else_body = p[6] if has_else else None
 
-        return AST.IfElseNode(condition, if_body, has_else, lineno=p.lineno)
+        return AST.IfElseNode(condition, if_body, has_else, else_body, lineno=p.lineno)
 
     @_('FOR ID ASSIGN expression RANGE expression instruction')
     def for_loop(self, p):

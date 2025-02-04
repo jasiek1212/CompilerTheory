@@ -2,8 +2,6 @@ class Node(object):
     def __init__(self, lineno):
         self.lineno = lineno
 
-    pass
-
 
 class InstructionsNode(Node):
     def __init__(self, instructions, lineno):
@@ -11,9 +9,7 @@ class InstructionsNode(Node):
         self.instructions = instructions
 
 
-
-
-class programNode(Node):
+class ProgramNode(Node):
     def __init__(self, instructions, lineno):
         super().__init__(lineno)
         self.instructions = instructions
@@ -78,6 +74,17 @@ class TransposeNode(Node):
 
     pass
 
+class StringOfIntsNode(Node):
+    def __init__(self, ints, lineno):
+        super().__init__(lineno)
+        self.ints = ints
+
+class MatrixRefNode(Node):
+    def __init__(self, ID, slices, lineno):
+        super().__init__(lineno)
+        self.ID = ID
+        self.slices = slices
+
 
 class MatrixFuncNode(Node):
     def __init__(self, func, expr, lineno):
@@ -85,46 +92,22 @@ class MatrixFuncNode(Node):
         self.func = func
         self.expr = expr
 
-    pass
-
-
-class ExpressionNode(Node):
-    def __init__(self, typ, inside, lineno):
-        super().__init__(lineno)
-        self.typ = typ
-        self.inside = inside
-
-    pass
-
-
 class BreakStatement(Node):
     def __init__(self, lineno):
         super().__init__(lineno)
 
-    pass
-
-
 class ContinueStatement(Node):
     def __init__(self, lineno):
         super().__init__(lineno)
-
-    pass
-
 
 class ReturnStatement(Node):
     def __init__(self, expr, lineno):
         super().__init__(lineno)
         self.expr = expr
 
-    pass
-
-
 class BlankStatement(Node):
     def __init__(self, lineno):
         super().__init__(lineno)
-
-    pass
-
 
 class NumberNode(Node):
     def __init__(self, number, lineno):
@@ -172,11 +155,12 @@ class ForNode(Node):
 
 
 class IfElseNode(Node):
-    def __init__(self, condition, if_body, has_else, lineno=0):
+    def __init__(self, condition, if_body, has_else, else_body, lineno=0):
         super().__init__(lineno)
         self.condition = condition
         self.if_body = if_body
         self.has_else = has_else
+        self.else_body = else_body
 
 
 class StringNode(Node):
